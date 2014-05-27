@@ -1,6 +1,5 @@
 ﻿using Lidgren.Network;
 using System.Threading;
-using System.Windows;
 
 namespace lilMessClient
 {
