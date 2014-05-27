@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,18 @@ namespace lilMessServer
         public MainWindow()
         {
             InitializeComponent();
+
+            Network.Initialise(DisplayMessage);
+            Network.StartServer();
+        }
+
+        private void DisplayMessage(string message)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                Output.AppendText(":" + DateTime.Now + ":\n" +
+                    message + Environment.NewLine);
+            }));            
         }
     }
 }
