@@ -16,11 +16,8 @@ namespace lilMessClient
 
         private void DisplayMessage(string message)
         {
-            Dispatcher.BeginInvoke(new ThreadStart(delegate
-            {
-                ChatBox.AppendText(":" + DateTime.Now + ":\n" +
-                    message + Environment.NewLine);
-            }));
+            Dispatcher.BeginInvoke(new ThreadStart(
+                () => ChatBox.AppendText(":" + DateTime.Now + ":\n" + message + Environment.NewLine)));
         }
 
         private void Message_KeyDown(object sender, KeyEventArgs e)
@@ -30,11 +27,6 @@ namespace lilMessClient
                 Network.Send(Message.Text);
                 Message.Text = string.Empty;
             }
-        }
-
-        private void Connect_Click(object sender, RoutedEventArgs e)
-        {
-            Network.Connect("127.0.0.1", 9997);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

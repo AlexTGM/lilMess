@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lilMessServer", "lilMessSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lilMessClient", "lilMessClient\lilMessClient.csproj", "{80A953A9-7468-4655-B00D-BB4C1227D300}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lilMessMisc", "lilMessMisc\lilMessMisc.csproj", "{AB07C439-3FE1-4740-A83F-AA82C187E172}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{80A953A9-7468-4655-B00D-BB4C1227D300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A953A9-7468-4655-B00D-BB4C1227D300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A953A9-7468-4655-B00D-BB4C1227D300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB07C439-3FE1-4740-A83F-AA82C187E172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB07C439-3FE1-4740-A83F-AA82C187E172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB07C439-3FE1-4740-A83F-AA82C187E172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB07C439-3FE1-4740-A83F-AA82C187E172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

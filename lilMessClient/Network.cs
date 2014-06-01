@@ -1,78 +1,132 @@
 ﻿using Lidgren.Network;
-using System.Threading;
+using lilMessMisc;
+using System;
 
 namespace lilMessClient
 {
     static class Network
     {
         public delegate void RecieveMessage(string message);
-        private static RecieveMessage recieve;
+        private static RecieveMessage _recieve;
 
-        private static NetClient s_client;
-        public static NetConnectionStatus CurrentStatus
-        { get { return s_client.ConnectionStatus; } }
+        private static NetClient _client;
+        public static bool Connected
+        { get { return _client.ConnectionStatus == NetConnectionStatus.Connected; } }
 
         public static void Initialise(RecieveMessage func)
         {
-            recieve = func;
+            _recieve = func;
 
-            var config = new NetPeerConfiguration("lilMess");
-            config.AutoFlushSendQueue = false;
-            s_client = new NetClient(config);
+            if (_client != null) return;
 
-            s_client.RegisterReceivedCallback(new SendOrPostCallback(GotMessage)); 
+            var config = new NetPeerConfiguration("lilMess") 
+                {AutoFlushSendQueue = false};
+
+            _client = new NetClient(config);
+            _client.RegisterReceivedCallback(GotMessage);
         }
 
-        public static void Connect(string host, int port)
+        public static bool Connect(string ip, int port)
         {
-            s_client.Start();
-            NetOutgoingMessage hail = s_client.CreateMessage("This is the hail message");
-            s_client.Connect(host, port, hail);
+            var started = DateTime.Now;
+
+            _client.Start();
+
+            var outMesssage = _client.CreateMessage();
+            outMesssage.Write((byte)PacketType.LogIn);
+            outMesssage.Write("test user");
+
+            _client.Connect(ip, port, outMesssage);
+
+            while ((DateTime.Now - started).Seconds < 10)
+            {
+                var im = _client.ReadMessage();
+
+                if (im != null)
+                {
+                    return Connected;
+                }
+            }
+
+            return false;
         }
 
         public static void GotMessage(object peer)
         {
             NetIncomingMessage im;
-            while ((im = s_client.ReadMessage()) != null)
+
+            while ((im = _client.ReadMessage()) != null)
             {
-                // handle incoming message
                 switch (im.MessageType)
                 {
                     case NetIncomingMessageType.DebugMessage:
                     case NetIncomingMessageType.ErrorMessage:
                     case NetIncomingMessageType.WarningMessage:
                     case NetIncomingMessageType.VerboseDebugMessage:
-                        string text = im.ReadString();
-                        recieve(text);
+                        var text = im.ReadString();
+                        _recieve(text);
                         break;
                     case NetIncomingMessageType.StatusChanged:
-                        NetConnectionStatus status = (NetConnectionStatus)im.ReadByte();
-
-                        string reason = im.ReadString();
-                        recieve(status.ToString() + ": " + reason);
-
+                        var status = (NetConnectionStatus)im.ReadByte();
+                        var reason = im.ReadString();
+                        _recieve(status + ": " + reason);
                         break;
                     case NetIncomingMessageType.Data:
-                        string chat = im.ReadString();
-                        recieve(chat);
+
+                        var messageType = im.ReadByte();
+
+                        switch (messageType)
+                        {
+                            case (byte)PacketType.ChatMessage:
+
+                                var chat = im.ReadString();
+                                _recieve(chat);
+
+                                break;
+
+                            case (byte)PacketType.VoiceMessage:
+
+                                var voice = im.ReadBytes(im.LengthBytes - 1);
+
+                                break;
+
+                            case (byte)PacketType.ServerMessage:
+
+                                var test = im.ReadInt32();
+
+                                break;
+                        }
+
                         break;
+
                     default:
-                        recieve("Unhandled type: " + im.MessageType + " " + im.LengthBytes + " bytes");
+                        _recieve("Unhandled type: " + im.MessageType + " " + im.LengthBytes + " bytes");
                         break;
                 }
             }
         }
 
-        public static void Send(string text)
+        public static void Send(string message)
         {
-            NetOutgoingMessage om = s_client.CreateMessage(text);
-            s_client.SendMessage(om, NetDeliveryMethod.ReliableOrdered);
-            s_client.FlushSendQueue();
+            var om = _client.CreateMessage();
+            om.Write(Convert.ToByte(PacketType.ChatMessage));
+            om.Write(message);
+            _client.SendMessage(om, NetDeliveryMethod.ReliableOrdered);
+            _client.FlushSendQueue();
+        }
+
+        public static void Send(byte[] message)
+        {
+            var om = _client.CreateMessage();
+            om.Write(Convert.ToByte(PacketType.VoiceMessage));
+            om.Write(message);
+            _client.SendMessage(om, NetDeliveryMethod.ReliableOrdered);
+            _client.FlushSendQueue();
         }
 
         public static void Shutdown()
         {
-            s_client.Disconnect("Requested by user");
+            _client.Disconnect("Requested by user");
         }
     }
 }

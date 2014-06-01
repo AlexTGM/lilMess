@@ -1,79 +1,121 @@
 ﻿using Lidgren.Network;
+using lilMessMisc;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows;
 
 namespace lilMessServer
 {
     class Network
     {
-        private static NetServer s_server;
+        private static Thread _listenThread;
+
+        private static NetServer _server;
+
         public delegate void RecieveMessage(string message);
-        private static RecieveMessage recieve;
+        private static RecieveMessage _recieve;
 
         public static void Initialise(RecieveMessage func)
         {
-            recieve = func;
+            _recieve = func;
 
-            var config = new NetPeerConfiguration("lilMess");
-			config.MaximumConnections = 100;
-			config.Port = 9997;
-			s_server = new NetServer(config);
+            var config = new NetPeerConfiguration("lilMess") 
+                { MaximumConnections = 100, Port = 9997 };
+
+            config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
+
+			_server = new NetServer(config);
         }
 
         public static void StartServer()
         {
-            s_server.Start();
-
-            Thread thread = new Thread(Idle);
-            thread.Start();
+            _listenThread = new Thread(Listen);
+            _listenThread.Start();
         }
 
-        private static void Idle()
+        private static void Listen()
         {
-            while (s_server.Status == NetPeerStatus.Running)
+            _server.Start();
+
+            while (_server.Status == NetPeerStatus.Running)
             {
                 NetIncomingMessage im;
 
-                while ((im = s_server.ReadMessage()) != null)
+                while ((im = _server.ReadMessage()) != null)
                 {
-                    // handle incoming message
                     switch (im.MessageType)
                     {
+                        case NetIncomingMessageType.ConnectionApproval:
+                            if (im.ReadByte() == (byte)PacketType.LogIn)
+                            {
+                                im.SenderConnection.Approve();
+                                var nick = im.ReadString(); 
+                            }
+                            break;
                         case NetIncomingMessageType.DebugMessage:
                         case NetIncomingMessageType.ErrorMessage:
                         case NetIncomingMessageType.WarningMessage:
                         case NetIncomingMessageType.VerboseDebugMessage:
-                            string text = im.ReadString();
-                            recieve(text);
+                            var text = im.ReadString();
+                            _recieve(text);
                             break;
                         case NetIncomingMessageType.StatusChanged:
-                            NetConnectionStatus status = (NetConnectionStatus)im.ReadByte();
-                            string reason = im.ReadString();
-                            im.SenderConnection.Disconnect("LALALL");
-                            recieve(NetUtility.ToHexString(im.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason);
+                            var status = (NetConnectionStatus)im.ReadByte();
 
-                            // UpdateConnectionsList();
+                            if (status == NetConnectionStatus.Connected)
+                            {
+                                NetOutgoingMessage om = _server.CreateMessage();
+                                om.Write((byte)PacketType.ServerMessage);
+                                om.Write(1);
+                                _server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                            }
+
+                            var reason = im.ReadString();
+                            _recieve(NetUtility.ToHexString(im.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason);
                             break;
                         case NetIncomingMessageType.Data:
-                            // incoming chat message from a client
-                            string chat = im.ReadString();
 
-                            recieve("Broadcasting '" + chat + "'");
+                            var messageType = im.ReadByte();
 
-                            // broadcast this to all connections, except sender
-                            List<NetConnection> all = s_server.Connections; // get copy
-                            all.Remove(im.SenderConnection);
-
-                            if (all.Count > 0)
+                            switch (messageType)
                             {
-                                NetOutgoingMessage om = s_server.CreateMessage();
-                                om.Write(NetUtility.ToHexString(im.SenderConnection.RemoteUniqueIdentifier) + " said: " + chat);
-                                s_server.SendMessage(om, all, NetDeliveryMethod.ReliableOrdered, 0);
+                                case (byte)PacketType.ChatMessage:
+
+                                    var chat = im.ReadString();
+
+                                    _recieve("Broadcasting '" + chat + "'");
+
+                                    if (_server.Connections.Count > 0)
+                                    {
+                                        var om = _server.CreateMessage();
+                                        om.Write((byte)PacketType.ChatMessage);
+                                        om.Write(NetUtility.ToHexString(im.SenderConnection.RemoteUniqueIdentifier) + " said: " + chat);
+                                        _server.SendMessage(om, _server.Connections, NetDeliveryMethod.ReliableOrdered, 0);
+                                    }
+
+                                    break;
+
+                                case (byte)PacketType.VoiceMessage:
+
+                                    var voice = im.ReadBytes(im.LengthBytes - 1);
+
+                                    var all = _server.Connections;
+                                    all.Remove(im.SenderConnection);
+
+                                    if (all.Count > 0)
+                                    {
+                                        var om = _server.CreateMessage();
+                                        om.Write((byte)PacketType.VoiceMessage);
+                                        om.Write(voice);
+                                        _server.SendMessage(om, all, NetDeliveryMethod.ReliableOrdered, 0);
+                                    }
+
+                                    break;
                             }
+
                             break;
+
                         default:
-                            recieve("Unhandled type: " + im.MessageType + " " + im.LengthBytes + " bytes " + im.DeliveryMethod + "|" + im.SequenceChannel);
+                            _recieve("Unhandled type: " + im.MessageType + " " + im.LengthBytes + " bytes " + im.DeliveryMethod + "|" + im.SequenceChannel);
                             break;
                     }
                 }
@@ -84,7 +126,8 @@ namespace lilMessServer
 
         public static void Shutdown()
         {
-            s_server.Shutdown("Requested by user");
+            _server.Shutdown("Requested by user");
+            _listenThread.Abort();
         }
     }
 }
