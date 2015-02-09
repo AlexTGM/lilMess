@@ -1,0 +1,35 @@
+﻿<controls:MetroWindow x:Name="LoginWindow"
+    x:Class="lilMess.Client.Views.LoginWindow"
+    xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    Title="lilMess" Height="300" Width="300"
+    DataContext="{Binding Login, Source={StaticResource Locator}}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="22*" />
+            <ColumnDefinition Width="41*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="lilMess" TextAlignment="Center" FontSize="32" Grid.Row="0" Grid.ColumnSpan="2" />
+
+        <TextBlock Text="Сервер" TextAlignment="Center" FontSize="16" Grid.Row="2" Grid.Column="0" Margin="7,3,7,3" />
+        <TextBox Text="{Binding ServerInfo}" controls:TextboxHelper.Watermark="127.0.0.1:1337" Grid.Row="2" Grid.Column="1" Margin="7,3,7,3"/>
+
+        <TextBlock Text="Логин" TextAlignment="Center" FontSize="16" Grid.Row="3" Grid.Column="0" Margin="7,3,7,3" />
+        <TextBox Text="{Binding UserName}" controls:TextboxHelper.Watermark="Логин" Grid.Row="3" Grid.Column="1" Margin="7,3,7,3"/>
+
+        <Button Content="Залогиниться" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}" />
+    </Grid>
+</controls:MetroWindow>
