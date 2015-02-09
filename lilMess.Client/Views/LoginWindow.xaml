@@ -1,4 +1,4 @@
-﻿<controls:MetroWindow x:Name="LoginWindow"
+﻿<controls:MetroWindow x:Name="Window"
     x:Class="lilMess.Client.Views.LoginWindow"
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -30,6 +30,6 @@
         <TextBlock Text="Логин" TextAlignment="Center" FontSize="16" Grid.Row="3" Grid.Column="0" Margin="7,3,7,3" />
         <TextBox Text="{Binding UserName}" controls:TextboxHelper.Watermark="Логин" Grid.Row="3" Grid.Column="1" Margin="7,3,7,3"/>
 
-        <Button Content="Залогиниться" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginWindow}" />
+        <Button Content="Залогиниться" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Window}" />
     </Grid>
 </controls:MetroWindow>
