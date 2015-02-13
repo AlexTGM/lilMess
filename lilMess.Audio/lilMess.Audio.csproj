@@ -40,6 +40,8 @@
     <Compile Include="Codecs\Impl\ALawChatCodec.cs" />
     <Compile Include="Codecs\Impl\MuLawChatCodec.cs" />
     <Compile Include="Codecs\Impl\UncompressedPcmChatCodec.cs" />
+    <Compile Include="Decoders\Impl\MuLawDecoder.cs" />
+    <Compile Include="Encoders\Impl\MuLawEncoder.cs" />
     <Compile Include="IAudioProcessor.cs" />
     <Compile Include="Codecs\INetworkChatCodec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -48,6 +50,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
