@@ -1,4 +1,4 @@
-﻿<Window x:Class="lilMess.Server.Views.MainWindow"
+﻿<Window x:Class="lilMess.Server.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="lilMess Server" Height="350" Width="525"
@@ -19,5 +19,6 @@
             </FlowDocument>
         </RichTextBox>
         <Button Content="Shutdown" Grid.Row="2" HorizontalAlignment="Right" Margin="0,10,10,10" Command="{Binding ShutdownCommand}" />
+        <Button Content="Logging" Grid.Row="2" HorizontalAlignment="Left" Margin="10,10,10,10" Command="{Binding EnableLogging}" />
     </Grid>
 </Window>

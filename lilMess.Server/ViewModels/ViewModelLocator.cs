@@ -15,10 +15,12 @@
 
         public MainWindowViewModel Main
         {
-            get
-            {
-                return Bootstrapper.Container.Resolve<MainWindowViewModel>();
-            }
+            get { return Bootstrapper.Container.Resolve<MainWindowViewModel>(); }
+        }
+
+        public StatisticsViewModel Statistics
+        {
+            get { return Bootstrapper.Container.Resolve<StatisticsViewModel>(); }
         }
     }
 }

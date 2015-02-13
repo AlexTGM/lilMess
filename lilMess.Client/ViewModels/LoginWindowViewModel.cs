@@ -30,21 +30,13 @@
         public string ServerInfo
         {
             get { return this.serverInfo; }
-            set
-            {
-                this.serverInfo = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.Set("ServerInfo", ref this.serverInfo, value); }
         }
 
         public string UserName
         {
             get { return this.userName; }
-            set
-            {
-                this.userName = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.Set("UserName", ref this.userName, value); }
         }
 
         private void TryLogin(object param)

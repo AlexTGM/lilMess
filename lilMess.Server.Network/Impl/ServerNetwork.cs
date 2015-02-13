@@ -8,6 +8,7 @@
     using lilMess.Misc;
     using lilMess.Misc.Model;
     using lilMess.Misc.Requests;
+    using lilMess.Server.Network.Models;
     using lilMess.Server.Network.Services;
 
     public class ServerNetwork : INetwork
@@ -15,16 +16,16 @@
         private readonly IService service;
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        private GotMessage gotMessage;
-
         public ServerNetwork(IService service)
         {
             this.service = service;
         }
+
+        public Statistics Statistics { get; set; }
+        public GotMessage GotMessage { get; set; }
         
-        public string StartupServer(GotMessage gotMessageDelegate)
+        public string StartupServer()
         {
-            this.gotMessage = gotMessageDelegate;
             Task.Run(() => this.service.StartupServer(this.ProcessMessage), this.cts.Token);
             return string.Format("Прослушиваем порт {0}", 9997);
         }
@@ -37,6 +38,11 @@
 
         private void ProcessMessage(NetIncomingMessage incomingMessage, UserModel user)
         {
+            var stats = Statistics;
+            var message = GotMessage;
+
+            if (stats != null) stats(new StatisticsModel(incomingMessage.LengthBytes, 0));
+
             switch (incomingMessage.MessageType)
             {
                 case NetIncomingMessageType.Data:
@@ -51,19 +57,19 @@
                                               Body = packet.PacketBody
                                           };
 
-                        this.gotMessage(this.service.InvokeMethod(packet, request));
+                        if (message != null) message(this.service.InvokeMethod(packet, request));
                         break;
                     }
 
                 case NetIncomingMessageType.StatusChanged:
                     {
-                        this.gotMessage(this.service.StatusChanged(user, incomingMessage));
+                        if (message != null) message(this.service.StatusChanged(user, incomingMessage));
                         break;
                     }
 
                 default:
                     {
-                        this.gotMessage(incomingMessage.ReadString());
+                        if (message != null) message(incomingMessage.ReadString());
                         break;
                     }
             }

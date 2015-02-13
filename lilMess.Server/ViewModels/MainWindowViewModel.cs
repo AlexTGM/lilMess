@@ -2,38 +2,34 @@
 {
     using System;
     using System.Text;
+    using System.Windows.Input;
 
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
 
     using lilMess.Server.Network;
+    using lilMess.Server.Views;
 
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly INetwork network;
-
-        private readonly StringBuilder document;
+        private readonly StringBuilder document = new StringBuilder();
 
         private string serverInfo;
 
         public MainWindowViewModel(INetwork network)
         {
-            this.document = new StringBuilder();
+            this.ServerInfo = network.StartupServer();
 
-            this.network = network;
-            this.ServerInfo = this.network.StartupServer(this.AddNewParagraph);
+            this.ShutdownCommand = new RelayCommand(network.ShutdownServer);
+            this.EnableLogging = new RelayCommand(() => new StatisticsView().Show());
 
-            this.ShutdownCommand = new RelayCommand(() => this.network.ShutdownServer());
+            network.GotMessage += this.AddNewParagraph;
         }
 
         public string ServerInfo
         {
             get { return this.serverInfo; }
-            set
-            {
-                this.serverInfo = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.Set("ServerInfo", ref this.serverInfo, value); }
         }
 
         public string Document
@@ -46,7 +42,9 @@
             }
         }
 
-        public RelayCommand ShutdownCommand { get; private set; }
+        public ICommand ShutdownCommand { get; private set; }
+
+        public ICommand EnableLogging { get; private set; }
 
         private void AddNewParagraph(string message)
         {
