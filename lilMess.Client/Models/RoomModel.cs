@@ -4,10 +4,7 @@
 
     public class RoomModel
     {
-        public RoomModel()
-        {
-            this.Users = new List<UserModel>();
-        }
+        public RoomModel() { this.Users = new List<UserModel>(); }
 
         public string Name { get; set; }
 
@@ -15,6 +12,6 @@
 
         public RoomModel Parent { get; set; }
 
-        public List<UserModel> Users { get; set; } 
+        public List<UserModel> Users { get; set; }
     }
 }

@@ -9,8 +9,6 @@
     public class ChatMessagePacket : Packet
     {
         public ChatMessagePacket(ChatMessageBody packetBody)
-            : base((byte)lilMess.Misc.PacketType.ChatMessage, packetBody)
-        {
-        }
+            : base((byte)Misc.PacketType.ChatMessage, packetBody) { }
     }
 }

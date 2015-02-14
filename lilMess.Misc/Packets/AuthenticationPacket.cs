@@ -9,8 +9,6 @@
     public class AuthenticationPacket : Packet
     {
         public AuthenticationPacket(AuthenticationBody packetBody)
-            : base((byte)Misc.PacketType.LogIn, packetBody)
-        {
-        }
+            : base((byte)Misc.PacketType.LogIn, packetBody) { }
     }
 }

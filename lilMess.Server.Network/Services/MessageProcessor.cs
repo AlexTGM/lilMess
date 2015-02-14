@@ -1,7 +1,7 @@
 ﻿namespace lilMess.Server.Network.Services
 {
+    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using AutoMapper;
 
@@ -14,19 +14,42 @@
     using lilMess.Misc.Model;
     using lilMess.Misc.Packets;
     using lilMess.Misc.Packets.Body;
+    using lilMess.Misc.Requests;
 
     public class MessageProcessor : IMessageProcessor
     {
         private readonly IUserService userService;
         private readonly IRepositoryManager manager;
 
-        private NetServer server;
-
         public MessageProcessor(IUserService userService, IRepositoryManager manager)
         {
             this.userService = userService;
             this.manager = manager;
+
+            this.Chat = new KeyValuePair<PacketType, Func<Request, string>>(
+                 PacketType.ChatMessage,
+                 request => this.GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).Message));
+
+            this.Audio = new KeyValuePair<PacketType, Func<Request, string>>(
+                PacketType.VoiceMessage,
+                request => this.GetVoiceMessage(request.UserModel, ((VoiceMessageBody)request.Body).Message));
+
+            this.Connection = new KeyValuePair<PacketType, Func<Request, string>>(
+                PacketType.LogIn,
+                request =>
+                {
+                    var body = (AuthenticationBody)request.Body;
+                    return this.ConnectionApproval(request.IncomingMessage, body.Guid, body.Login);
+                });
         }
+
+        public SendNewPacket SendNewPacket { get; set; }
+
+        public KeyValuePair<PacketType, Func<Request, string>> Chat { get; set; }
+
+        public KeyValuePair<PacketType, Func<Request, string>> Audio { get; set; }
+
+        public KeyValuePair<PacketType, Func<Request, string>> Connection { get; set; }
 
         public string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login)
         {
@@ -44,37 +67,24 @@
 
         public string GetChatMessage(UserModel user, string message)
         {
-            var messageBody = new ChatMessageBody { Sender = user.Name, Message = message };
-            var chatMessage = new ChatMessagePacket(messageBody);
+            var sendNewPacket = SendNewPacket;
 
-            this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage), this.server.Connections);
+            var chatMessage = new ChatMessagePacket(new ChatMessageBody { Sender = user.Name, Message = message });
+            if (sendNewPacket != null) { sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage), new List<NetConnection>()); }
 
             return string.Format("Сообщение от {0}: {1}", user.Name, message);
         }
 
         public string GetVoiceMessage(UserModel user, byte[] message)
         {
-            var recipients = this.server.Connections.Where(x => x != user.Connection).ToList();
+            var sendNewPacket = SendNewPacket;
 
-            var messageBody = new VoiceMessageBody { Message = message };
-            var voiceMessage = new VoiceMessagePacket(messageBody);
+            var except = new List<NetConnection> { user.Connection };
 
-            this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(voiceMessage), recipients);
+            var voiceMessage = new VoiceMessagePacket(new VoiceMessageBody { Message = message });
+            if (sendNewPacket != null) { sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(voiceMessage), except); }
 
             return string.Format("Пользователь {0} начал запись голосового сообщения", user.Name);
-        }
-        private void SendPacket(byte[] data, List<NetConnection> recipients)
-        {
-            if (!recipients.Any()) return;
-
-            var outgoingMessage = this.server.CreateMessage();
-
-            var sendBuffer = new NetBuffer();
-            sendBuffer.Write(data);
-
-            outgoingMessage.Write(sendBuffer);
-
-            this.server.SendMessage(outgoingMessage, recipients, NetDeliveryMethod.ReliableOrdered, 0);
         }
     }
 }

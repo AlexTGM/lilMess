@@ -1,6 +1,7 @@
 ﻿namespace lilMess.Server.Network
 {
     using lilMess.Server.Network.Models;
+    using lilMess.Server.Network.Services;
 
     public delegate void GotMessage(string message);
 
@@ -8,9 +9,9 @@
 
     public interface INetwork
     {
-        GotMessage GotMessage { get; set; }
+        IService Service { get; }
 
-        Statistics Statistics { get; set; }
+        GotMessage GotMessage { get; set; }
 
         string StartupServer();
 

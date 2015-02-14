@@ -9,8 +9,6 @@
     public class ServerInfoPacket : Packet
     {
         public ServerInfoPacket(ServerInfoBody packetBody)
-            : base((byte)Misc.PacketType.ServerMessage, packetBody)
-        {
-        }
+            : base((byte)Misc.PacketType.ServerMessage, packetBody) { }
     }
 }

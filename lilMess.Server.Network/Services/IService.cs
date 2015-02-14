@@ -10,18 +10,14 @@
 
     public interface IService
     {
+        Statistics Statistics { get; set; }
+
         void StartupServer(ProcessNewMessage processNewMessageDelegate);
 
         void ShutdownServer();
 
         string InvokeMethod(Packet packet, Request request);
 
-        string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login);
-
         string StatusChanged(UserModel user, NetIncomingMessage incomingMessage);
-
-        string GetChatMessage(UserModel user, string message);
-
-        string GetVoiceMessage(UserModel user, byte[] message);
     }
 }

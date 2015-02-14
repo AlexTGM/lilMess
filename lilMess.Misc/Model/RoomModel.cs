@@ -2,13 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     [Serializable]
     public class RoomModel
     {
         public RoomModel()
         {
-            this.Users = new List<UserModel>();
+            this.Users = new ObservableCollection<UserModel>();
         }
 
         public string Name { get; set; }
@@ -17,6 +18,6 @@
 
         public RoomModel Parent { get; set; }
 
-        public List<UserModel> Users { get; set; }
+        public ObservableCollection<UserModel> Users { get; set; }
     }
 }

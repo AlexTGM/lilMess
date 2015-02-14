@@ -8,70 +8,55 @@
     using lilMess.Misc;
     using lilMess.Misc.Model;
     using lilMess.Misc.Requests;
-    using lilMess.Server.Network.Models;
     using lilMess.Server.Network.Services;
 
     public class ServerNetwork : INetwork
     {
-        private readonly IService service;
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         public ServerNetwork(IService service)
         {
-            this.service = service;
+            this.Service = service;
         }
 
-        public Statistics Statistics { get; set; }
         public GotMessage GotMessage { get; set; }
-        
+
+        public IService Service { get; private set; }
+
         public string StartupServer()
         {
-            Task.Run(() => this.service.StartupServer(this.ProcessMessage), this.cts.Token);
+            Task.Run(() => this.Service.StartupServer(this.ProcessMessage), this.cts.Token);
             return string.Format("Прослушиваем порт {0}", 9997);
         }
 
         public void ShutdownServer()
         {
             this.cts.Cancel();
-            this.service.ShutdownServer();
+            this.Service.ShutdownServer();
         }
 
         private void ProcessMessage(NetIncomingMessage incomingMessage, UserModel user)
         {
-            var stats = Statistics;
             var message = GotMessage;
-
-            if (stats != null) stats(new StatisticsModel(incomingMessage.LengthBytes, 0));
 
             switch (incomingMessage.MessageType)
             {
                 case NetIncomingMessageType.Data:
                 case NetIncomingMessageType.ConnectionApproval:
-                    {
-                        var packet = Serializer<Packet>.DeserializeObject(incomingMessage.PeekDataBuffer());
+                    var packet = Serializer<Packet>.DeserializeObject(incomingMessage.PeekDataBuffer());
 
-                        var request = new Request
-                                          {
-                                              IncomingMessage = incomingMessage,
-                                              UserModel = user,
-                                              Body = packet.PacketBody
-                                          };
+                    var request = new Request { IncomingMessage = incomingMessage, UserModel = user, Body = packet.PacketBody };
 
-                        if (message != null) message(this.service.InvokeMethod(packet, request));
-                        break;
-                    }
+                    if (message != null) { message(this.Service.InvokeMethod(packet, request)); }
+                    break;
 
                 case NetIncomingMessageType.StatusChanged:
-                    {
-                        if (message != null) message(this.service.StatusChanged(user, incomingMessage));
-                        break;
-                    }
+                    if (message != null) { message(this.Service.StatusChanged(user, incomingMessage)); }
+                    break;
 
                 default:
-                    {
-                        if (message != null) message(incomingMessage.ReadString());
-                        break;
-                    }
+                    if (message != null) { message(incomingMessage.ReadString()); }
+                    break;
             }
         }
     }

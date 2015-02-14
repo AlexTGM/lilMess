@@ -11,7 +11,7 @@
 
         public StatisticsViewModel(INetwork network)
         {
-            network.Statistics += delegate(Network.Models.StatisticsModel stats)
+            network.Service.Statistics += delegate(Network.Models.StatisticsModel stats)
                 {
                     this.statisticsModel.IncomingTraffic += stats.IncomingTraffic;
                     this.statisticsModel.OutcomingTraffic += stats.OutcomingTraffic;

@@ -9,7 +9,8 @@
             this.OutcomingTraffic = outcoming;
         }
 
-        public long IncomingTraffic { get; set; }
-        public long OutcomingTraffic { get; set; }
+        public long IncomingTraffic { get; private set; }
+
+        public long OutcomingTraffic { get; private set; }
     }
 }

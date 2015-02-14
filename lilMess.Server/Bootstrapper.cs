@@ -1,16 +1,18 @@
 ﻿namespace lilMess.Server
 {
     using AutoMapper;
+
     using Lidgren.Network;
+
     using lilMess.DataAccess;
     using lilMess.DataAccess.Impl;
     using lilMess.DataAccess.Models;
     using lilMess.Misc.Model;
     using lilMess.Server.Network;
     using lilMess.Server.Network.Impl;
-    using lilMess.Server.Network.Models;
     using lilMess.Server.Network.Services;
     using lilMess.Server.ViewModels;
+
     using Microsoft.Practices.Unity;
 
     public class Bootstrapper
@@ -31,6 +33,7 @@
             this.Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<IService, Service>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<INetwork, ServerNetwork>(new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<IMessageProcessor, MessageProcessor>(new ContainerControlledLifetimeManager());
 
             this.Container.RegisterType<MainWindowViewModel>();
             this.Container.RegisterType<StatisticsViewModel>();
@@ -38,10 +41,7 @@
             var config = new NetPeerConfiguration("lilMess") { MaximumConnections = 100, Port = 9997 };
             config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
 
-            this.Container.RegisterInstance(
-                typeof(NetServer),
-                new NetServer(config),
-                new ContainerControlledLifetimeManager());
+            this.Container.RegisterInstance(typeof(NetServer), new NetServer(config), new ContainerControlledLifetimeManager());
         }
 
         private void ConfigureBindings()
@@ -57,8 +57,6 @@
             Mapper.CreateMap<Room, RoomModel>();
 
             Mapper.CreateMap<RoomModel, Room>();
-
-            Mapper.CreateMap<StatisticsModel, Models.StatisticsModel>();
         }
     }
 }

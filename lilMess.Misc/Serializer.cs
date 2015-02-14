@@ -21,14 +21,11 @@
 
         public static T DeserializeObject(byte[] data)
         {
-            if (data == null) return default(T);
+            if (data == null) { return default(T); }
 
             var formatter = new BinaryFormatter();
 
-            using (var stream = new MemoryStream(data))
-            {
-                return (T)formatter.Deserialize(stream);
-            }
+            using (var stream = new MemoryStream(data)) { return (T)formatter.Deserialize(stream); }
         }
     }
 }

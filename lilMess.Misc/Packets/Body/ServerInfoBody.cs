@@ -8,6 +8,6 @@
     [Serializable]
     public class ServerInfoBody : Body
     {
-        public List<RoomModel> Rooms { get; set; }
+        public List<RoomModel> ServerRooms { get; set; }
     }
 }

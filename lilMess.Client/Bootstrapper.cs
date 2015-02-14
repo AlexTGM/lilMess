@@ -1,5 +1,7 @@
 ﻿namespace lilMess.Client
 {
+    using AutoMapper;
+
     using lilMess.Audio;
     using lilMess.Audio.Impl;
     using lilMess.Client.Network;
@@ -14,6 +16,7 @@
         {
             this.Container = new UnityContainer();
             this.ConfigureContainer();
+            this.ConfigureBindings();
         }
 
         public IUnityContainer Container { get; private set; }
@@ -25,6 +28,12 @@
 
             this.Container.RegisterType<MainWindowViewModel>();
             this.Container.RegisterType<LoginWindowViewModel>();
+        }
+
+        private void ConfigureBindings()
+        {
+            Mapper.CreateMap<Misc.Model.RoomModel, Models.RoomModel>();
+            Mapper.CreateMap<Misc.Model.UserModel, Models.UserModel>();
         }
     }
 }

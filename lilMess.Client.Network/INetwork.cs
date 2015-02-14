@@ -12,11 +12,11 @@
 
     public interface INetwork
     {
-        string ServerInfo { get; }
+        RecieveMessage Chat { get; set; }
+        ReciveAudio Audio { get; set; }
+        RefreshRoomList Refresh { get; set; }
 
         void StartClient();
-
-        void Initialise(RecieveMessage func1, RefreshRoomList func2 = null, ReciveAudio func3 = null);
 
         void Connect(string ip, int port, string login);
 

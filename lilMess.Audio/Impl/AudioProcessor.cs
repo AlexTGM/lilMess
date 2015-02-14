@@ -8,8 +8,11 @@
     public class AudioProcessor : IAudioProcessor
     {
         private readonly INetworkChatCodec codec;
+
         private readonly WaveIn waveIn;
+
         private readonly WaveOut waveOut;
+
         private readonly BufferedWaveProvider waveProvider;
 
         private SendVoiceMessage sendVoiceMessage;
@@ -20,12 +23,7 @@
         {
             this.codec = new UncompressedPcmChatCodec();
 
-            this.waveIn = new WaveIn
-            {
-                BufferMilliseconds = 50,
-                DeviceNumber = 0,
-                WaveFormat = this.codec.RecordFormat,
-            };
+            this.waveIn = new WaveIn { BufferMilliseconds = 500, DeviceNumber = 0, WaveFormat = this.codec.RecordFormat, };
 
             this.waveOut = new WaveOut();
             this.waveProvider = new BufferedWaveProvider(this.codec.RecordFormat);

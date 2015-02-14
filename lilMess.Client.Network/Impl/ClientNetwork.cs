@@ -16,20 +16,11 @@
     {
         private readonly List<RoomModel> roomsList = new List<RoomModel>();
 
-        private RecieveMessage chat;
-
-        private ReciveAudio audio;
-
-        private RefreshRoomList refresh;
-
         private NetClient client;
 
-        private string serverInfo = "Disconnected";
-
-        public string ServerInfo
-        {
-            get { return this.serverInfo; }
-        }
+        public RecieveMessage Chat { get; set; }
+        public ReciveAudio Audio { get; set; }
+        public RefreshRoomList Refresh { get; set; }
 
         public void StartClient()
         {
@@ -49,19 +40,8 @@
             this.client.Start();
         }
 
-        public void Initialise(RecieveMessage func1, RefreshRoomList func2 = null, ReciveAudio func3 = null)
-        {
-            this.chat = func1;
-            this.refresh = func2;
-            this.audio = func3;
-
-            this.StartClient();
-        }
-
         public void Connect(string ip, int port, string login)
         {
-            this.serverInfo = string.Format("{0}:{1}", ip, port);
-
             var started = DateTime.Now;
 
             var authenticationPacketBody = new AuthenticationBody { Login = login, Guid = Guid.GetUniqueHardwareId() };
@@ -126,25 +106,31 @@
 
         private void AddNewRoomRange(IEnumerable<RoomModel> rooms)
         {
+            var refresh = this.Refresh;
+
             this.roomsList.Clear();
             this.roomsList.AddRange(rooms);
-            this.refresh(this.roomsList);
+
+            if (refresh != null) refresh(this.roomsList);
         }
 
         private void ReadMessage(NetIncomingMessage incomingMessage)
         {
+            var chat = this.Chat;
+            var audio = this.Audio;
+
             switch (incomingMessage.MessageType)
             {
                 case NetIncomingMessageType.DebugMessage:
                 case NetIncomingMessageType.ErrorMessage:
                 case NetIncomingMessageType.WarningMessage:
                 case NetIncomingMessageType.VerboseDebugMessage:
-                    if (this.chat != null) this.chat(incomingMessage.ReadString());
+                    if (chat != null) chat(incomingMessage.ReadString());
                     break;
                 case NetIncomingMessageType.StatusChanged:
                     var status = (NetConnectionStatus)incomingMessage.ReadByte();
                     string reason = incomingMessage.ReadString();
-                    if (this.chat != null) this.chat(status + ": " + reason);
+                    if (chat != null) chat(status + ": " + reason);
                     break;
                 case NetIncomingMessageType.Data:
 
@@ -159,17 +145,17 @@
                                 ((ChatMessageBody)packet.PacketBody).Sender,
                                 ((ChatMessageBody)packet.PacketBody).Message);
 
-                            this.chat(message);
+                            chat(message);
                             break;
 
                         case (byte)PacketType.VoiceMessage:
 
-                            this.audio(((VoiceMessageBody)packet.PacketBody).Message);
+                            audio(((VoiceMessageBody)packet.PacketBody).Message);
                             break;
 
                         case (byte)PacketType.ServerMessage:
 
-                            var rooms = ((ServerInfoBody)packet.PacketBody).Rooms;
+                            var rooms = ((ServerInfoBody)packet.PacketBody).ServerRooms;
                             this.AddNewRoomRange(rooms.ToArray());
                             break;
                     }
@@ -177,7 +163,7 @@
                     break;
 
                 default:
-                    this.chat(
+                    chat(
                         string.Format(
                             "Unhandled type: {0} {1} bytes",
                             incomingMessage.MessageType,

@@ -9,8 +9,6 @@
     public class VoiceMessagePacket : Packet
     {
         public VoiceMessagePacket(VoiceMessageBody packetBody)
-            : base((byte)Misc.PacketType.VoiceMessage, packetBody)
-        {
-        }
+            : base((byte)Misc.PacketType.VoiceMessage, packetBody) { }
     }
 }
