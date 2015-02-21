@@ -17,7 +17,7 @@
     public class Service : IService
     {
         private readonly IUserService userService;
-        
+
         private readonly NetServer server;
 
         private readonly Dictionary<PacketType, Func<Request, string>> methods;
@@ -37,7 +37,7 @@
             messageProcessor.SendNewPacket += this.SendPacket;
         }
 
-        public Statistics Statistics { get; set; }
+        public StatisticsModel Stats { get { return new StatisticsModel(this.server.Statistics.ReceivedBytes, this.server.Statistics.SentBytes); } }
 
         public void StartupServer(ProcessNewMessage processNewMessageDelegate)
         {
@@ -47,12 +47,7 @@
             {
                 var message = this.server.ReadMessage();
 
-                if (message != null)
-                {
-                    var stats = Statistics;
-                    if (stats != null) { stats(new StatisticsModel(message.LengthBytes, 0)); }
-                    processNewMessageDelegate.Invoke(message, this.userService.FindUser(message.SenderConnection));
-                }
+                if (message != null) { processNewMessageDelegate.Invoke(message, this.userService.FindUser(message.SenderConnection)); }
 
                 Thread.Sleep(100);
             }
@@ -76,7 +71,6 @@
 
         private void SendPacket(byte[] data, List<NetConnection> except)
         {
-            var stats = Statistics; 
             var recipients = this.server.Connections.Except(except).ToList();
 
             if (!recipients.Any()) { return; }
@@ -87,7 +81,6 @@
             sendBuffer.Write(data);
 
             outgoingMessage.Write(sendBuffer);
-            if (stats != null) { stats(new StatisticsModel(0, outgoingMessage.LengthBytes)); }
             this.server.SendMessage(outgoingMessage, recipients, NetDeliveryMethod.ReliableOrdered, 0);
         }
     }

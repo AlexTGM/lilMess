@@ -1,5 +1,6 @@
 ﻿namespace lilMess.Client.ViewModels
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Text;
     using System.Windows.Input;
@@ -58,7 +59,7 @@
         public RelayCommand SendChatMessageCommand { get; private set; }
         
         public RelayCommand OpenLoginWindowCommand { get; private set; }
-
+        
         public string ServerInfo
         {
             get { return this.serverInfo; }
@@ -87,12 +88,14 @@
             set { this.Set("RoomsList", ref this.roomsList, value); }
         }
 
-        public void OnKeyDown(KeyEventArgs e)
+        public void OnWindowClosing(object sender, EventArgs e) { this.network.Shutdown(); }
+
+        public void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F2) this.audioProcessor.StartRecording(this.network.SendVoiceMessage);
         }
 
-        public void OnKeyUp(KeyEventArgs e)
+        public void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F2) this.audioProcessor.StopRecording();
         }

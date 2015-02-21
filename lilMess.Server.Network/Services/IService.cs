@@ -5,12 +5,13 @@
     using lilMess.Misc;
     using lilMess.Misc.Model;
     using lilMess.Misc.Requests;
+    using lilMess.Server.Network.Models;
 
     public delegate void ProcessNewMessage(NetIncomingMessage incomingMessage, UserModel user);
 
     public interface IService
     {
-        Statistics Statistics { get; set; }
+        StatisticsModel Stats { get; }
 
         void StartupServer(ProcessNewMessage processNewMessageDelegate);
 

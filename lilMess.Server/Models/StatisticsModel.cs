@@ -1,22 +1,45 @@
 ﻿namespace lilMess.Server.Models
 {
+    using System;
+
     using GalaSoft.MvvmLight;
 
     public class StatisticsModel : ObservableObject
     {
+        private TimeSpan time;
+
         private long incomingTraffic;
+
         private long outcomingTraffic;
 
-        public long IncomingTraffic
+        private float cpuLoad;
+
+        private float memLoad;
+
+        public StatisticsModel()
         {
-            get { return this.incomingTraffic; }
-            set { this.Set("IncomingTraffic", ref this.incomingTraffic, value); }
+            this.Time = DateTime.Now.TimeOfDay;
         }
 
-        public long OutcomingTraffic
+        public TimeSpan Time { get { return this.time; } set { this.Set("Time", ref this.time, value); } }
+
+        public long IncomingTraffic { get { return this.incomingTraffic; } set { this.Set("IncomingTraffic", ref this.incomingTraffic, value); } }
+
+        public long OutcomingTraffic { get { return this.outcomingTraffic; } set { this.Set("OutcomingTraffic", ref this.outcomingTraffic, value); } }
+
+        public float CpuLoad { get { return this.cpuLoad; } set { this.Set("CpuLoad", ref this.cpuLoad, value); } }
+
+        public float MemLoad { get { return this.memLoad; } set { this.Set("MemLoad", ref this.memLoad, value); } }
+
+        public static StatisticsModel operator -(StatisticsModel obj1, StatisticsModel obj2)
         {
-            get { return this.outcomingTraffic; }
-            set { this.Set("OutcomingTraffic", ref this.outcomingTraffic, value); }
+            var statistics = new StatisticsModel
+                                 {
+                                     IncomingTraffic = obj1.IncomingTraffic - obj2.IncomingTraffic,
+                                     OutcomingTraffic = obj1.OutcomingTraffic - obj2.OutcomingTraffic
+                                 };
+
+            return statistics;
         }
     }
 }

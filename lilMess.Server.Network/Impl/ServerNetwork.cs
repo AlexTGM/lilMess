@@ -8,6 +8,7 @@
     using lilMess.Misc;
     using lilMess.Misc.Model;
     using lilMess.Misc.Requests;
+    using lilMess.Server.Network.Models;
     using lilMess.Server.Network.Services;
 
     public class ServerNetwork : INetwork
@@ -18,6 +19,8 @@
         {
             this.Service = service;
         }
+
+        public StatisticsModel StatisticsModel { get { return this.Service.Stats; } }
 
         public GotMessage GotMessage { get; set; }
 

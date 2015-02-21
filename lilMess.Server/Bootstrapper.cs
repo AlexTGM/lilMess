@@ -36,7 +36,7 @@
             this.Container.RegisterType<IMessageProcessor, MessageProcessor>(new ContainerControlledLifetimeManager());
 
             this.Container.RegisterType<MainWindowViewModel>();
-            this.Container.RegisterType<StatisticsViewModel>();
+            this.Container.RegisterType<StatisticsVeiewModel>();
 
             var config = new NetPeerConfiguration("lilMess") { MaximumConnections = 100, Port = 9997 };
             config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
@@ -57,6 +57,8 @@
             Mapper.CreateMap<Room, RoomModel>();
 
             Mapper.CreateMap<RoomModel, Room>();
+
+            Mapper.CreateMap<Network.Models.StatisticsModel, Models.StatisticsModel>();
         }
     }
 }

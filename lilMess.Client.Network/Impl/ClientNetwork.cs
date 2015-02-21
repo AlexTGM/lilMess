@@ -19,7 +19,9 @@
         private NetClient client;
 
         public RecieveMessage Chat { get; set; }
+
         public ReciveAudio Audio { get; set; }
+
         public RefreshRoomList Refresh { get; set; }
 
         public void StartClient()
@@ -31,10 +33,7 @@
                     {
                         NetIncomingMessage incomingMessage;
 
-                        while ((incomingMessage = client.ReadMessage()) != null)
-                        {
-                            ReadMessage(incomingMessage);
-                        }
+                        while ((incomingMessage = client.ReadMessage()) != null) { ReadMessage(incomingMessage); }
                     });
 
             this.client.Start();
@@ -61,10 +60,7 @@
 
                 if (im != null && im.MessageType == NetIncomingMessageType.StatusChanged)
                 {
-                    if (this.client.ConnectionStatus == NetConnectionStatus.Connected)
-                    {
-                        return;
-                    }
+                    if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { return; }
 
                     throw new Exception("Wrong creditianals!");
                 }
@@ -73,10 +69,7 @@
             throw new Exception("Can't establish a connection to the server!");
         }
 
-        public void Shutdown()
-        {
-            this.client.Disconnect("Requested by user");
-        }
+        public void Shutdown() { this.client.Disconnect("Requested by user"); }
 
         public void SendChatMessage(string message)
         {
@@ -140,10 +133,7 @@
                     {
                         case (byte)PacketType.ChatMessage:
 
-                            var message = string.Format(
-                                "{0}: {1}",
-                                ((ChatMessageBody)packet.PacketBody).Sender,
-                                ((ChatMessageBody)packet.PacketBody).Message);
+                            var message = string.Format("{0}: {1}", ((ChatMessageBody)packet.PacketBody).Sender, ((ChatMessageBody)packet.PacketBody).Message);
 
                             chat(message);
                             break;
@@ -163,11 +153,7 @@
                     break;
 
                 default:
-                    chat(
-                        string.Format(
-                            "Unhandled type: {0} {1} bytes",
-                            incomingMessage.MessageType,
-                            incomingMessage.LengthBytes));
+                    chat(string.Format("Unhandled type: {0} {1} bytes", incomingMessage.MessageType, incomingMessage.LengthBytes));
                     break;
             }
         }

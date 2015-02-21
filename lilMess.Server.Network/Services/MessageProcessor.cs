@@ -27,8 +27,8 @@
             this.manager = manager;
 
             this.Chat = new KeyValuePair<PacketType, Func<Request, string>>(
-                 PacketType.ChatMessage,
-                 request => this.GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).Message));
+                PacketType.ChatMessage,
+                request => this.GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).Message));
 
             this.Audio = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.VoiceMessage,
@@ -37,10 +37,10 @@
             this.Connection = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.LogIn,
                 request =>
-                {
-                    var body = (AuthenticationBody)request.Body;
-                    return this.ConnectionApproval(request.IncomingMessage, body.Guid, body.Login);
-                });
+                    {
+                        var body = (AuthenticationBody)request.Body;
+                        return this.ConnectionApproval(request.IncomingMessage, body.Guid, body.Login);
+                    });
         }
 
         public SendNewPacket SendNewPacket { get; set; }

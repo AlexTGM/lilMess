@@ -12,8 +12,9 @@
 
             var viewModel = (MainWindowViewModel)this.DataContext;
 
-            this.KeyDown += (sender, args) => viewModel.OnKeyDown(args);
-            this.KeyUp += (sender, args) => viewModel.OnKeyUp(args);
+            this.KeyDown += viewModel.OnKeyDown;
+            this.KeyUp += viewModel.OnKeyUp;
+            this.Closed += viewModel.OnWindowClosing;
         }
     }
 }

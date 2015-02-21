@@ -1,5 +1,7 @@
 ﻿namespace lilMess.Server.Network.Models
 {
+    using System;
+
     public struct StatisticsModel
     {
         public StatisticsModel(long incoming, long outcoming)

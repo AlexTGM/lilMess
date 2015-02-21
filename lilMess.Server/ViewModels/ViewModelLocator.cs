@@ -8,19 +8,10 @@
     {
         private static readonly Bootstrapper Bootstrapper;
 
-        static ViewModelLocator()
-        {
-            if (Bootstrapper == null) Bootstrapper = new Bootstrapper();
-        }
+        static ViewModelLocator() { if (Bootstrapper == null) Bootstrapper = new Bootstrapper(); }
 
-        public MainWindowViewModel Main
-        {
-            get { return Bootstrapper.Container.Resolve<MainWindowViewModel>(); }
-        }
+        public MainWindowViewModel Main { get { return Bootstrapper.Container.Resolve<MainWindowViewModel>(); } }
 
-        public StatisticsViewModel Statistics
-        {
-            get { return Bootstrapper.Container.Resolve<StatisticsViewModel>(); }
-        }
+        public StatisticsVeiewModel Statistics { get { return Bootstrapper.Container.Resolve<StatisticsVeiewModel>(); } }
     }
 }
