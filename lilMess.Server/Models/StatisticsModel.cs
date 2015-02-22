@@ -16,20 +16,37 @@
 
         private float memLoad;
 
-        public StatisticsModel()
+        private StatisticsModel() { this.Time = DateTime.Now.TimeOfDay; }
+
+        public TimeSpan Time
         {
-            this.Time = DateTime.Now.TimeOfDay;
+            get { return this.time; }
+            set { this.Set("Time", ref this.time, value); }
         }
 
-        public TimeSpan Time { get { return this.time; } set { this.Set("Time", ref this.time, value); } }
+        public long IncomingTraffic
+        {
+            get { return this.incomingTraffic; }
+            set { this.Set("IncomingTraffic", ref this.incomingTraffic, value); }
+        }
 
-        public long IncomingTraffic { get { return this.incomingTraffic; } set { this.Set("IncomingTraffic", ref this.incomingTraffic, value); } }
+        public long OutcomingTraffic
+        {
+            get { return this.outcomingTraffic; }
+            set { this.Set("OutcomingTraffic", ref this.outcomingTraffic, value); }
+        }
 
-        public long OutcomingTraffic { get { return this.outcomingTraffic; } set { this.Set("OutcomingTraffic", ref this.outcomingTraffic, value); } }
+        public float CpuLoad
+        {
+            get { return this.cpuLoad; }
+            set { this.Set("CpuLoad", ref this.cpuLoad, value); }
+        }
 
-        public float CpuLoad { get { return this.cpuLoad; } set { this.Set("CpuLoad", ref this.cpuLoad, value); } }
-
-        public float MemLoad { get { return this.memLoad; } set { this.Set("MemLoad", ref this.memLoad, value); } }
+        public float MemLoad
+        {
+            get { return this.memLoad; }
+            set { this.Set("MemLoad", ref this.memLoad, value); }
+        }
 
         public static StatisticsModel operator -(StatisticsModel obj1, StatisticsModel obj2)
         {

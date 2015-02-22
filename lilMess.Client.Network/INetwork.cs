@@ -8,16 +8,14 @@
 
     public delegate void ReciveAudio(byte[] message);
 
-    public delegate void RefreshRoomList(List<RoomModel> rooms); 
+    public delegate void RefreshRoomList(List<RoomModel> rooms);
 
     public interface INetwork
     {
         RecieveMessage Chat { get; set; }
         ReciveAudio Audio { get; set; }
         RefreshRoomList Refresh { get; set; }
-
-        void StartClient();
-
+        
         void Connect(string ip, int port, string login);
 
         void Shutdown();

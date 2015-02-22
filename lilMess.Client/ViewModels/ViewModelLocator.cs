@@ -8,25 +8,12 @@
     {
         private static readonly Bootstrapper Bootstrapper;
 
-        static ViewModelLocator()
-        {
-            if (Bootstrapper == null) Bootstrapper = new Bootstrapper();
-        }
+        static ViewModelLocator() { if (Bootstrapper == null) Bootstrapper = new Bootstrapper(); }
 
-        public MainWindowViewModel Main
-        {
-            get
-            {
-                return Bootstrapper.Container.Resolve<MainWindowViewModel>();
-            }
-        }
+        public MainWindowViewModel Main { get { return Bootstrapper.Container.Resolve<MainWindowViewModel>(); } }
 
-        public LoginWindowViewModel Login
-        {
-            get
-            {
-                return Bootstrapper.Container.Resolve<LoginWindowViewModel>();
-            }
-        }
+        public LoginWindowViewModel Login { get { return Bootstrapper.Container.Resolve<LoginWindowViewModel>(); } }
+
+        public RoomListViewModel RoomList { get { return Bootstrapper.Container.Resolve<RoomListViewModel>(); } }
     }
 }

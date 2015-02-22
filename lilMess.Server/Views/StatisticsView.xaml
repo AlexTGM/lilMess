@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        xmlns:statisticProviders="clr-namespace:lilMess.Server.Models.StatisticProviders"
         Title="StatisticsView" Height="400" Width="400"
         DataContext="{Binding Statistics, Source={StaticResource Locator}}">
     <Grid>
@@ -14,22 +15,29 @@
             <ColumnDefinition Width="70*"/>
         </Grid.ColumnDefinitions>
         <StackPanel>
-            <TextBlock>Server is running</TextBlock>            
+            <TextBlock Text="Choose Statistics Source:" />
+            <ComboBox ItemsSource="{Binding StatisticsProviders}" SelectedItem="{Binding StatisticsProvider}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StatisticsCaption}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <DataGrid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Collection}" 
                   IsReadOnly="True" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Time}" Header="Время" Width="*"/>
-                <DataGridTextColumn Binding="{Binding IncomingTraffic}" Header="Входящий траффик" Width="*"/>
-                <DataGridTextColumn Binding="{Binding OutcomingTraffic}" Header="Исходящий траффик" Width="*"/>
+                <DataGridTextColumn Binding="{Binding IncomingTraffic}" Header="Входящий трафик" Width="*"/>
+                <DataGridTextColumn Binding="{Binding OutcomingTraffic}" Header="Исходящий трафик" Width="*"/>
                 <DataGridTextColumn Binding="{Binding CpuLoad}" Header="Загрузка CPU" Width="*"/>
                 <DataGridTextColumn Binding="{Binding MemLoad}" Header="Загрузка RAM" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <d3:ChartPlotter Grid.Row="0" Grid.Column="1">
-            <d3:Header FontFamily="Georgia" Content="Статистика сервера"/>
-            <d3:HorizontalAxisTitle FontFamily="Georgia" Content="Время"/>
-            <d3:VerticalAxisTitle FontFamily="Georgia" Content="Входящий траффик" />
+            <d3:Header Content="{Binding StatisticsProvider.ChartHeader}"/>
+            <d3:HorizontalAxisTitle Content="{Binding StatisticsProvider.HorizontalAxisTitle}"/>
+            <d3:VerticalAxisTitle Content="{Binding StatisticsProvider.VerticalAxisTitle}" />
             <d3:LineGraph DataSource="{Binding ChartDataSource}" />
         </d3:ChartPlotter>
     </Grid>

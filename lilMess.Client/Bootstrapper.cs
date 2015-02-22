@@ -2,6 +2,8 @@
 {
     using AutoMapper;
 
+    using Lidgren.Network;
+
     using lilMess.Audio;
     using lilMess.Audio.Impl;
     using lilMess.Client.Network;
@@ -20,14 +22,16 @@
         }
 
         public IUnityContainer Container { get; private set; }
-        
+
         private void ConfigureContainer()
         {
-            this.Container.RegisterInstance<INetwork>(new ClientNetwork(), new ContainerControlledLifetimeManager());
-            this.Container.RegisterInstance<IAudioProcessor>(new AudioProcessor(), new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<INetwork, ClientNetwork>(new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<IAudioProcessor, AudioProcessor>(new ContainerControlledLifetimeManager());
 
             this.Container.RegisterType<MainWindowViewModel>();
             this.Container.RegisterType<LoginWindowViewModel>();
+
+            this.Container.RegisterInstance(typeof(NetClient), new NetClient(new NetPeerConfiguration("lilMess")), new ContainerControlledLifetimeManager());
         }
 
         private void ConfigureBindings()

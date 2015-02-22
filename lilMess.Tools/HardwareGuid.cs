@@ -5,7 +5,7 @@
     using System.Security.Cryptography;
     using System.Text;
 
-    public static class Guid
+    public static class HardwareGuid
     {
         public static string GetUniqueHardwareId()
         {

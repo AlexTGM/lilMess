@@ -5,6 +5,7 @@
 
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
+    using GalaSoft.MvvmLight.Messaging;
 
     using lilMess.Client.Network;
     using lilMess.Client.Views;
@@ -12,11 +13,13 @@
 
     public class LoginWindowViewModel : ViewModelBase
     {
+        public static readonly Guid Token = Guid.NewGuid();
+
         private readonly INetwork network;
 
         private string serverInfo = "127.0.0.1:9997";
 
-        private string userName = "admin";
+        private string userName = "User";
 
         public LoginWindowViewModel(INetwork network)
         {
@@ -45,6 +48,8 @@
             if (ep == null) throw new Exception("Проверьте правильность введенного адреса");
 
             Task.Factory.StartNew(() => this.network.Connect(ep.Address.ToString(), ep.Port, this.UserName)).Wait();
+
+            Messenger.Default.Send(new NotificationMessage(this.ServerInfo), Token);
 
             ((LoginWindow)param).Hide();
         }

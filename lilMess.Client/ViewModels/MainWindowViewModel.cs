@@ -1,7 +1,7 @@
 ﻿namespace lilMess.Client.ViewModels
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
     using System.Text;
     using System.Windows.Input;
 
@@ -9,6 +9,7 @@
 
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
+    using GalaSoft.MvvmLight.Messaging;
 
     using lilMess.Audio;
     using lilMess.Client.Models;
@@ -17,13 +18,13 @@
 
     public class MainWindowViewModel : ViewModelBase
     {
+        public static readonly Guid Token = Guid.NewGuid();
+
         private readonly INetwork network;
 
         private readonly IAudioProcessor audioProcessor;
 
-        private readonly StringBuilder document = new StringBuilder("Welcome!");
-
-        private ObservableCollection<RoomModel> roomsList = new ObservableCollection<RoomModel>();
+        private readonly StringBuilder document = new StringBuilder("Welcome!\n");
 
         private string serverInfo = "Disconnected";
 
@@ -34,43 +35,23 @@
             this.network = clientNetwork;
             this.audioProcessor = audioProcessor;
 
-            this.network.StartClient();
-
-            this.ShutdownCommand = new RelayCommand(() => this.network.Shutdown());
-            this.SendChatMessageCommand = new RelayCommand(
-                () =>
-                    {
-                        this.network.SendChatMessage(this.ChatMessage);
-                        this.ChatMessage = string.Empty;
-                    });
-            this.OpenLoginWindowCommand = new RelayCommand(() => new LoginWindow().ShowDialog());
+            this.SendChatMessageCommand = new RelayCommand(this.SendTypedMessage, () => this.CanSendMessage);
+            this.OpenLoginWindowCommand = new RelayCommand(this.ShowLoginWindow);
 
             this.network.Chat += message => this.Document = message;
             this.network.Audio += message => this.audioProcessor.Translate(message);
-            this.network.Refresh += rooms =>
-                {
-                    var mapped = Mapper.Map<ObservableCollection<RoomModel>>(rooms);
-                    this.RoomsList = new ObservableCollection<RoomModel>(mapped);
-                };
-        }
+            this.network.Refresh += rooms => this.UpdateRooms(Mapper.Map<List<RoomModel>>(rooms));
 
-        public RelayCommand ShutdownCommand { get; private set; }
+            Messenger.Default.Register<NotificationMessage>(this, LoginWindowViewModel.Token, this.UpdateConnectionInfo);
+        }
 
         public RelayCommand SendChatMessageCommand { get; private set; }
-        
-        public RelayCommand OpenLoginWindowCommand { get; private set; }
-        
-        public string ServerInfo
-        {
-            get { return this.serverInfo; }
-            set { this.Set("ServerInfo", ref this.serverInfo, value); }
-        }
 
-        public string ChatMessage
-        {
-            get { return this.chatMessage; }
-            set { this.Set("ChatMessage", ref this.chatMessage, value); }
-        }
+        public RelayCommand OpenLoginWindowCommand { get; private set; }
+
+        public string ServerInfo { get { return this.serverInfo; } set { this.Set("ServerInfo", ref this.serverInfo, value); } }
+
+        public string ChatMessage { get { return this.chatMessage; } set { this.Set("ChatMessage", ref this.chatMessage, value); } }
 
         public string Document
         {
@@ -82,22 +63,24 @@
             }
         }
 
-        public ObservableCollection<RoomModel> RoomsList
-        {
-            get { return this.roomsList; }
-            set { this.Set("RoomsList", ref this.roomsList, value); }
-        }
+        private bool CanSendMessage { get { return string.IsNullOrWhiteSpace(this.ChatMessage) == false; } }
 
         public void OnWindowClosing(object sender, EventArgs e) { this.network.Shutdown(); }
 
-        public void OnKeyDown(object sender, KeyEventArgs e)
+        public void OnKeyDown(object sender, KeyEventArgs e) { if (e.Key == Key.F2) this.audioProcessor.StartRecording(this.network.SendVoiceMessage); }
+
+        public void OnKeyUp(object sender, KeyEventArgs e) { if (e.Key == Key.F2) this.audioProcessor.StopRecording(); }
+
+        private void UpdateRooms(List<RoomModel> rooms) { Messenger.Default.Send(new NotificationMessage<List<RoomModel>>(rooms, "RoomsWasUpdated"), Token); }
+
+        private void SendTypedMessage()
         {
-            if (e.Key == Key.F2) this.audioProcessor.StartRecording(this.network.SendVoiceMessage);
+            this.network.SendChatMessage(this.ChatMessage);
+            this.ChatMessage = string.Empty;
         }
 
-        public void OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.F2) this.audioProcessor.StopRecording();
-        }
+        private void UpdateConnectionInfo(NotificationMessage message) { this.ServerInfo = string.Format("Connected to: {0}", message.Notification); }
+
+        private void ShowLoginWindow() { new LoginWindow().ShowDialog(); }
     }
 }

@@ -10,7 +10,7 @@
     using lilMess.Misc.Packets;
     using lilMess.Misc.Packets.Body;
 
-    using Guid = lilMess.Tools.Guid;
+    using Guid = lilMess.Tools.HardwareGuid;
 
     public class ClientNetwork : INetwork
     {
@@ -18,16 +18,9 @@
 
         private NetClient client;
 
-        public RecieveMessage Chat { get; set; }
-
-        public ReciveAudio Audio { get; set; }
-
-        public RefreshRoomList Refresh { get; set; }
-
-        public void StartClient()
+        public ClientNetwork(NetClient client)
         {
-            this.client = new NetClient(new NetPeerConfiguration("lilMess"));
-
+            this.client = client;
             this.client.RegisterReceivedCallback(
                 peer =>
                     {
@@ -35,12 +28,20 @@
 
                         while ((incomingMessage = client.ReadMessage()) != null) { ReadMessage(incomingMessage); }
                     });
-
-            this.client.Start();
         }
+
+        public RecieveMessage Chat { get; set; }
+
+        public ReciveAudio Audio { get; set; }
+
+        public RefreshRoomList Refresh { get; set; }
 
         public void Connect(string ip, int port, string login)
         {
+            if (this.client.ConnectionStatus == NetConnectionStatus.Connected) this.client.Disconnect("Ушел на хуй");
+
+            this.client.Start();
+
             var started = DateTime.Now;
 
             var authenticationPacketBody = new AuthenticationBody { Login = login, Guid = Guid.GetUniqueHardwareId() };
@@ -58,12 +59,9 @@
             {
                 var im = this.client.ReadMessage();
 
-                if (im != null && im.MessageType == NetIncomingMessageType.StatusChanged)
-                {
-                    if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { return; }
+                if (im == null || im.MessageType != NetIncomingMessageType.StatusChanged) { continue; }
 
-                    throw new Exception("Wrong creditianals!");
-                }
+                if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { return; }
             }
 
             throw new Exception("Can't establish a connection to the server!");
