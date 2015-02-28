@@ -1,6 +1,5 @@
 ﻿namespace lilMess.Client.Network.Impl
 {
-    using System;
     using System.Collections.Generic;
 
     using Lidgren.Network;
@@ -21,13 +20,7 @@
         public ClientNetwork(NetClient client)
         {
             this.client = client;
-            this.client.RegisterReceivedCallback(
-                peer =>
-                    {
-                        NetIncomingMessage incomingMessage;
-
-                        while ((incomingMessage = client.ReadMessage()) != null) { ReadMessage(incomingMessage); }
-                    });
+            this.client.RegisterReceivedCallback(this.Callback);
         }
 
         public RecieveMessage Chat { get; set; }
@@ -38,11 +31,9 @@
 
         public void Connect(string ip, int port, string login)
         {
-            if (this.client.ConnectionStatus == NetConnectionStatus.Connected) this.client.Disconnect("Ушел на хуй");
+            if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { this.Shutdown(); }
 
             this.client.Start();
-
-            var started = DateTime.Now;
 
             var authenticationPacketBody = new AuthenticationBody { Login = login, Guid = Guid.GetUniqueHardwareId() };
             var auth = new AuthenticationPacket(authenticationPacketBody);
@@ -54,17 +45,6 @@
             outMesssage.Write(sendBuffer);
 
             this.client.Connect(ip, port, outMesssage);
-
-            while ((DateTime.Now - started).Seconds < 5)
-            {
-                var im = this.client.ReadMessage();
-
-                if (im == null || im.MessageType != NetIncomingMessageType.StatusChanged) { continue; }
-
-                if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { return; }
-            }
-
-            throw new Exception("Can't establish a connection to the server!");
         }
 
         public void Shutdown()
@@ -84,6 +64,13 @@
             var voiceMessage = new VoiceMessagePacket(new VoiceMessageBody { Message = message });
 
             this.SendPacket(Serializer<VoiceMessagePacket>.SerializeObject(voiceMessage));
+        }
+
+        private void Callback(object peer)
+        {
+            NetIncomingMessage incomingMessage;
+
+            while ((incomingMessage = this.client.ReadMessage()) != null) { this.ReadMessage(incomingMessage); }
         }
 
         private void SendPacket(byte[] data)
@@ -119,13 +106,17 @@
                 case NetIncomingMessageType.ErrorMessage:
                 case NetIncomingMessageType.WarningMessage:
                 case NetIncomingMessageType.VerboseDebugMessage:
-                    //if (chat != null) chat(incomingMessage.ReadString());
+                    if (chat != null) { chat(this.SystemMessage(incomingMessage.ReadString())); }
+
                     break;
                 case NetIncomingMessageType.StatusChanged:
-                    var status = (NetConnectionStatus)incomingMessage.ReadByte();
-                    string reason = incomingMessage.ReadString();
-                    //if (chat != null) chat(status + ": " + reason);
-                    break;
+                    {
+                        var status = (NetConnectionStatus)incomingMessage.ReadByte();
+                        var reason = incomingMessage.ReadString();
+                        if (chat != null) { chat(this.SystemMessage(string.Format("{0} : {1}", status, reason))); }
+
+                        break;
+                    }
                 case NetIncomingMessageType.Data:
 
                     var packet = Serializer<Packet>.DeserializeObject(incomingMessage.PeekDataBuffer());
@@ -153,9 +144,19 @@
                     break;
 
                 default:
-                    //chat(string.Format("Unhandled type: {0} {1} bytes", incomingMessage.MessageType, incomingMessage.LengthBytes));
-                    break;
+                    {
+                        if (chat != null) { chat(this.SystemMessage(string.Format("Unhandled type: {0}", incomingMessage.MessageType))); }
+
+                        break;
+                    }
             }
+        }
+
+        private ChatMessageModel SystemMessage(string message)
+        {
+            var system = new UserModel { UserName = "system", UserRole = new RoleModel { RoleColor = "Yellow", RoleName = "system" } };
+
+            return new ChatMessageModel { MessageContent = message, MessageSender = system };
         }
     }
 }
