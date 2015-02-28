@@ -21,8 +21,8 @@
             this.ServerInfo = network.StartupServer();
 
             this.ShutdownCommand = new RelayCommand(network.ShutdownServer);
-            this.EnableLogging = new RelayCommand(() => new StatisticsView().Show());
-
+            this.GatherStatisticsCommand = new RelayCommand(() => new StatisticsView().Show());
+            
             network.GotMessage += this.AddNewParagraph;
         }
 
@@ -44,7 +44,7 @@
 
         public ICommand ShutdownCommand { get; private set; }
 
-        public ICommand EnableLogging { get; private set; }
+        public ICommand GatherStatisticsCommand { get; private set; }
 
         private void AddNewParagraph(string message)
         {

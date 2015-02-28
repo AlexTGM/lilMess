@@ -1,5 +1,7 @@
 ﻿namespace lilMess.Client
 {
+    using System;
+
     using AutoMapper;
 
     using Lidgren.Network;
@@ -38,6 +40,9 @@
         {
             Mapper.CreateMap<Misc.Model.RoomModel, Models.RoomModel>();
             Mapper.CreateMap<Misc.Model.UserModel, Models.UserModel>();
+
+            Mapper.CreateMap<Misc.Model.ChatMessageModel, Models.ChatMessageModel>()
+                .ForMember(dest => dest.MessageTime, opt => opt.MapFrom(dest => DateTime.Now));
         }
     }
 }

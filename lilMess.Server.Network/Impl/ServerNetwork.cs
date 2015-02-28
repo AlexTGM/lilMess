@@ -8,27 +8,28 @@
     using lilMess.Misc;
     using lilMess.Misc.Model;
     using lilMess.Misc.Requests;
-    using lilMess.Server.Network.Models;
     using lilMess.Server.Network.Services;
 
     public class ServerNetwork : INetwork
     {
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        public ServerNetwork(IService service)
+        public ServerNetwork(IService service, IStatisticsService statisticsService)
         {
             this.Service = service;
+            this.StatisticsService = statisticsService;
         }
 
-        public StatisticsModel StatisticsModel { get { return this.Service.Stats; } }
+        public IStatisticsService StatisticsService { get; private set; }
 
         public GotMessage GotMessage { get; set; }
 
-        public IService Service { get; private set; }
-
+        private IService Service { get; set; }
+        
         public string StartupServer()
         {
             Task.Run(() => this.Service.StartupServer(this.ProcessMessage), this.cts.Token);
+
             return string.Format("Прослушиваем порт {0}", 9997);
         }
 

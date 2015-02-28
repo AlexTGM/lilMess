@@ -6,19 +6,14 @@
 
     public class StatisticsModel : ObservableObject
     {
-        private TimeSpan time;
+        private DateTime time;
 
-        private long incomingTraffic;
+        private long incomingTraffic, outcomingTraffic;
+        private float cpuLoad, memLoad;
 
-        private long outcomingTraffic;
+        private StatisticsModel() { this.Time = DateTime.Now; }
 
-        private float cpuLoad;
-
-        private float memLoad;
-
-        private StatisticsModel() { this.Time = DateTime.Now.TimeOfDay; }
-
-        public TimeSpan Time
+        public DateTime Time
         {
             get { return this.time; }
             set { this.Set("Time", ref this.time, value); }
@@ -46,17 +41,6 @@
         {
             get { return this.memLoad; }
             set { this.Set("MemLoad", ref this.memLoad, value); }
-        }
-
-        public static StatisticsModel operator -(StatisticsModel obj1, StatisticsModel obj2)
-        {
-            var statistics = new StatisticsModel
-                                 {
-                                     IncomingTraffic = obj1.IncomingTraffic - obj2.IncomingTraffic,
-                                     OutcomingTraffic = obj1.OutcomingTraffic - obj2.OutcomingTraffic
-                                 };
-
-            return statistics;
         }
     }
 }

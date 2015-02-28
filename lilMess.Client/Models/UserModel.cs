@@ -1,7 +1,23 @@
 ﻿namespace lilMess.Client.Models
 {
-    public class UserModel
+    using GalaSoft.MvvmLight;
+
+    public class UserModel : ObservableObject
     {
-        public string Name { get; set; }
+        private string userName;
+
+        private RoleModel userRole;
+
+        public RoleModel UserRole
+        {
+            get { return this.userRole; }
+            set { this.Set("userRole", ref this.userRole, value); }
+        }
+
+        public string UserName
+        {
+            get { return this.userName; }
+            set { this.Set("UserName", ref this.userName, value); }
+        }
     }
 }

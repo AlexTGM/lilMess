@@ -16,7 +16,7 @@
     {
         private readonly List<RoomModel> roomsList = new List<RoomModel>();
 
-        private NetClient client;
+        private readonly NetClient client;
 
         public ClientNetwork(NetClient client)
         {
@@ -67,11 +67,14 @@
             throw new Exception("Can't establish a connection to the server!");
         }
 
-        public void Shutdown() { this.client.Disconnect("Requested by user"); }
+        public void Shutdown()
+        {
+            this.client.Disconnect("Requested by user");
+        }
 
         public void SendChatMessage(string message)
         {
-            var chatMessage = new ChatMessagePacket(new ChatMessageBody { Message = message });
+            var chatMessage = new ChatMessagePacket(new ChatMessageBody { ChatMessageModel = new ChatMessageModel { MessageContent = message } });
 
             this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage));
         }
@@ -116,12 +119,12 @@
                 case NetIncomingMessageType.ErrorMessage:
                 case NetIncomingMessageType.WarningMessage:
                 case NetIncomingMessageType.VerboseDebugMessage:
-                    if (chat != null) chat(incomingMessage.ReadString());
+                    //if (chat != null) chat(incomingMessage.ReadString());
                     break;
                 case NetIncomingMessageType.StatusChanged:
                     var status = (NetConnectionStatus)incomingMessage.ReadByte();
                     string reason = incomingMessage.ReadString();
-                    if (chat != null) chat(status + ": " + reason);
+                    //if (chat != null) chat(status + ": " + reason);
                     break;
                 case NetIncomingMessageType.Data:
 
@@ -131,9 +134,8 @@
                     {
                         case (byte)PacketType.ChatMessage:
 
-                            var message = string.Format("{0}: {1}", ((ChatMessageBody)packet.PacketBody).Sender, ((ChatMessageBody)packet.PacketBody).Message);
+                            chat(((ChatMessageBody)packet.PacketBody).ChatMessageModel);
 
-                            chat(message);
                             break;
 
                         case (byte)PacketType.VoiceMessage:
@@ -151,7 +153,7 @@
                     break;
 
                 default:
-                    chat(string.Format("Unhandled type: {0} {1} bytes", incomingMessage.MessageType, incomingMessage.LengthBytes));
+                    //chat(string.Format("Unhandled type: {0} {1} bytes", incomingMessage.MessageType, incomingMessage.LengthBytes));
                     break;
             }
         }

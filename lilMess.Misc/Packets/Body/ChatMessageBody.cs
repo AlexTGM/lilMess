@@ -2,11 +2,11 @@
 {
     using System;
 
+    using lilMess.Misc.Model;
+
     [Serializable]
     public class ChatMessageBody : Body
     {
-        public string Sender { get; set; }
-
-        public string Message { get; set; }
+        public ChatMessageModel ChatMessageModel { get; set; } 
     }
 }

@@ -4,7 +4,7 @@
 
     using lilMess.Misc.Model;
 
-    public delegate void RecieveMessage(string message);
+    public delegate void RecieveMessage(ChatMessageModel message);
 
     public delegate void ReciveAudio(byte[] message);
 
@@ -13,9 +13,11 @@
     public interface INetwork
     {
         RecieveMessage Chat { get; set; }
+
         ReciveAudio Audio { get; set; }
+
         RefreshRoomList Refresh { get; set; }
-        
+
         void Connect(string ip, int port, string login);
 
         void Shutdown();

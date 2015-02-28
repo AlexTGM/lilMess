@@ -1,17 +1,40 @@
 ﻿namespace lilMess.Client.Models
 {
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
-    public class RoomModel
+    using GalaSoft.MvvmLight;
+
+    public class RoomModel : ObservableObject
     {
-        public RoomModel() { this.Users = new List<UserModel>(); }
+        private string roomName;
 
-        public string Name { get; set; }
+        private bool roomIsHome;
 
-        public bool Home { get; set; }
+        private RoomModel roomParent;
 
-        public RoomModel Parent { get; set; }
+        public RoomModel()
+        {
+            this.RoomUsers = new ObservableCollection<UserModel>();
+        }
 
-        public List<UserModel> Users { get; set; }
+        public ObservableCollection<UserModel> RoomUsers { get; private set; }
+
+        public RoomModel RoomParent
+        {
+            get { return this.roomParent; }
+            set { this.Set("RoomParent", ref this.roomParent, value); }
+        }
+
+        public bool RoomIsHome
+        {
+            get { return this.roomIsHome; }
+            set { this.Set("RoomIsHome", ref this.roomIsHome, value); }
+        }
+
+        public string RoomName
+        {
+            get { return this.roomName; }
+            set { this.Set("RoomName", ref this.roomName, value); }
+        }
     }
 }

@@ -28,7 +28,7 @@
 
             this.Chat = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.ChatMessage,
-                request => this.GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).Message));
+                request => this.GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).ChatMessageModel.MessageContent));
 
             this.Audio = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.VoiceMessage,
@@ -69,10 +69,11 @@
         {
             var sendNewPacket = SendNewPacket;
 
-            var chatMessage = new ChatMessagePacket(new ChatMessageBody { Sender = user.Name, Message = message });
+            var chatMessageModel = new ChatMessageModel { MessageContent = message, MessageSender = user };
+            var chatMessage = new ChatMessagePacket(new ChatMessageBody { ChatMessageModel = chatMessageModel });
             if (sendNewPacket != null) { sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage), new List<NetConnection>()); }
 
-            return string.Format("Сообщение от {0}: {1}", user.Name, message);
+            return string.Format("Сообщение от {0}: {1}", user.UserName, message);
         }
 
         public string GetVoiceMessage(UserModel user, byte[] message)
@@ -84,7 +85,7 @@
             var voiceMessage = new VoiceMessagePacket(new VoiceMessageBody { Message = message });
             if (sendNewPacket != null) { sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(voiceMessage), except); }
 
-            return string.Format("Пользователь {0} начал запись голосового сообщения", user.Name);
+            return string.Format("Пользователь {0} начал запись голосового сообщения", user.UserName);
         }
     }
 }

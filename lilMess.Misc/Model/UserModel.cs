@@ -10,22 +10,40 @@
         [NonSerialized]
         private NetConnection connection;
 
-        private string name;
+        private string userName;
 
         [NonSerialized]
         private string guid;
 
-        public UserModel() { }
+        public UserModel() {}
 
-        public UserModel(NetConnection connection) { this.connection = connection; }
+        public UserModel(NetConnection connection)
+        {
+            this.connection = connection;
+        }
 
-        public UserModel(NetConnection connection, string name)
-            : this(connection) { this.name = name; }
+        public UserModel(NetConnection connection, string userName)
+            : this(connection)
+        {
+            this.userName = userName;
+        }
 
-        public NetConnection Connection { get { return this.connection; } set { this.connection = value; } }
+        public NetConnection Connection
+        {
+            get { return this.connection; }
+            set { this.connection = value; }
+        }
 
-        public string Name { get { return this.name; } set { this.name = value; } }
+        public string UserName
+        {
+            get { return this.userName; }
+            set { this.userName = value; }
+        }
 
-        public string Guid { get { return this.guid; } set { this.guid = value; } }
+        public string Guid
+        {
+            get { return this.guid; }
+            set { this.guid = value; }
+        }
     }
 }

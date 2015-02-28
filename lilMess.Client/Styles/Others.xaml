@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="ChatMessageBorderStyle" TargetType="{x:Type Border}">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Background" Value="{StaticResource AccentColorBrush2}" />
+    </Style>
+
+    <Style x:Key="TextBlockDefault" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="SegoeUI" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style x:Key="TextBlockSender" BasedOn="{StaticResource TextBlockDefault}" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontStyle" Value="Italic"/>
+    </Style>
+
+    <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
+        <Border Background="{TemplateBinding Background}" 
+                x:Name="Bd" BorderBrush="Gray"
+                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="7">
+            <ScrollViewer x:Name="PART_ContentHost"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" TargetName="Bd"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+            <Trigger Property="Width" Value="Auto">
+                <Setter Property="MinWidth" Value="100"/>
+            </Trigger>
+            <Trigger Property="Height" Value="Auto">
+                <Setter Property="MinHeight" Value="20"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+</ResourceDictionary>

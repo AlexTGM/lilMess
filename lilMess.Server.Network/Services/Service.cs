@@ -37,7 +37,13 @@
             messageProcessor.SendNewPacket += this.SendPacket;
         }
 
-        public StatisticsModel Stats { get { return new StatisticsModel(this.server.Statistics.ReceivedBytes, this.server.Statistics.SentBytes); } }
+        public StatisticsModel Stats
+        {
+            get
+            {
+                return new StatisticsModel(this.server.Statistics.ReceivedBytes, this.server.Statistics.SentBytes);
+            }
+        }
 
         public void StartupServer(ProcessNewMessage processNewMessageDelegate)
         {
@@ -53,9 +59,15 @@
             }
         }
 
-        public string InvokeMethod(Packet packet, Request request) { return this.methods[(PacketType)packet.PacketType].Invoke(request); }
+        public string InvokeMethod(Packet packet, Request request)
+        {
+            return this.methods[(PacketType)packet.PacketType].Invoke(request);
+        }
 
-        public void ShutdownServer() { this.server.Shutdown("Сервер отключен администратором"); }
+        public void ShutdownServer()
+        {
+            this.server.Shutdown("Сервер отключен администратором");
+        }
 
         public string StatusChanged(UserModel user, NetIncomingMessage incomingMessage)
         {

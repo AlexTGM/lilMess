@@ -37,6 +37,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\MessageModel.cs" />
     <Compile Include="Model\RoomModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Packets\AuthenticationPacket.cs" />

@@ -21,15 +21,24 @@
             this.rooms.AddRange(Mapper.Map<IEnumerable<RoomModel>>(roomList));
         }
 
-        public void AddUser(UserModel user, RoomModel room = null) { (room ?? this.rooms.First(x => x.Home)).Users.Add(user); }
+        public void AddUser(UserModel user, RoomModel room = null)
+        {
+            (room ?? this.rooms.First(x => x.RoomIsHome)).RoomUsers.Add(user);
+        }
 
         public UserModel FindUser(NetConnection connection)
         {
-            return this.rooms.Select(room => room.Users.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault();
+            return this.rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault();
         }
 
-        public void RemoveUser(UserModel user) { foreach (var room in this.rooms.Where(room => room.Users.Contains(user))) room.Users.Remove(user); }
+        public void RemoveUser(UserModel user)
+        {
+            foreach (var room in this.rooms.Where(room => room.RoomUsers.Contains(user))) room.RoomUsers.Remove(user);
+        }
 
-        public List<RoomModel> GetRoomsList() { return this.rooms.ToList(); }
+        public List<RoomModel> GetRoomsList()
+        {
+            return this.rooms.ToList();
+        }
     }
 }
