@@ -12,6 +12,8 @@
 
         private string userName;
 
+        private RoleModel userRole;
+
         [NonSerialized]
         private string guid;
 
@@ -32,6 +34,12 @@
         {
             get { return this.connection; }
             set { this.connection = value; }
+        }
+
+        public RoleModel UserRole
+        {
+            get { return this.userRole; }
+            set { this.userRole = value; }
         }
 
         public string UserName

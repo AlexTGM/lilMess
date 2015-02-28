@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\MessageModel.cs" />
+    <Compile Include="Model\RoleModel.cs" />
     <Compile Include="Model\RoomModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Packets\AuthenticationPacket.cs" />

@@ -22,7 +22,7 @@
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type model:UserModel}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding UserName}" />
+                        <TextBlock Text="{Binding UserName}" Foreground="{Binding UserRole.RoleColor}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>

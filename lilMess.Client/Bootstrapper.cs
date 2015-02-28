@@ -39,6 +39,7 @@
         private void ConfigureBindings()
         {
             Mapper.CreateMap<Misc.Model.RoomModel, Models.RoomModel>();
+            Mapper.CreateMap<Misc.Model.RoleModel, Models.RoleModel>();
             Mapper.CreateMap<Misc.Model.UserModel, Models.UserModel>();
 
             Mapper.CreateMap<Misc.Model.ChatMessageModel, Models.ChatMessageModel>()

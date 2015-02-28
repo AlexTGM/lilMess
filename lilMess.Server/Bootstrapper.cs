@@ -1,5 +1,7 @@
 ﻿namespace lilMess.Server
 {
+    using System.Collections.Specialized;
+
     using AutoMapper;
 
     using Lidgren.Network;
@@ -49,6 +51,7 @@
         {
             Mapper.CreateMap<User, UserModel>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.UserRole, opt => opt.MapFrom(src => src.Role))
                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(src => src.Guid));
 
             Mapper.CreateMap<UserModel, User>()
@@ -61,6 +64,10 @@
                 .ForMember(dest => dest.RoomIsHome, opt => opt.MapFrom(src => src.Home));
 
             Mapper.CreateMap<RoomModel, Room>();
+
+            Mapper.CreateMap<Role, RoleModel>()
+                .ForMember(dest => dest.RoleColor, opt => opt.MapFrom(src => src.Color))
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Name));
 
             Mapper.CreateMap<Network.Models.StatisticsModel, Models.StatisticsModel>();
         }

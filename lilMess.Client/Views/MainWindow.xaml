@@ -10,23 +10,23 @@
 	ResizeMode="CanResizeWithGrip"
 	GlowBrush="{DynamicResource AccentColorBrush}"
 	WindowStartupLocation="CenterScreen"
-    
+	
 	DataContext="{Binding Main, Source={StaticResource Locator}}">
 
-    <controls:MetroWindow.LeftWindowCommands>
-        <controls:WindowCommands>
-            <Button Command="{Binding OpenGitRepositoryCommand}" ToolTip="lilMess on GitHub">
-                <Rectangle Width="22" Height="22" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Uniform"
-                                     Visual="{StaticResource appbar_github}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button>
-        </controls:WindowCommands>
-    </controls:MetroWindow.LeftWindowCommands>
+	<controls:MetroWindow.LeftWindowCommands>
+		<controls:WindowCommands>
+			<Button Command="{Binding OpenGitRepositoryCommand}" ToolTip="lilMess on GitHub">
+				<Rectangle Width="22" Height="22" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+					<Rectangle.OpacityMask>
+						<VisualBrush Stretch="Uniform"
+									 Visual="{StaticResource appbar_github}" />
+					</Rectangle.OpacityMask>
+				</Rectangle>
+			</Button>
+		</controls:WindowCommands>
+	</controls:MetroWindow.LeftWindowCommands>
 
-    <controls:MetroWindow.RightWindowCommands>
+	<controls:MetroWindow.RightWindowCommands>
 		<controls:WindowCommands>
 			<Button Content="Connect" Command="{Binding OpenLoginWindowCommand}"/>
 		</controls:WindowCommands>
@@ -48,7 +48,7 @@
 		<views:RoomListView Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="Transparent"/>
 		
 		<ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2" Margin="10">
-            <ItemsControl Padding="5" ItemsSource="{Binding Messages}" Background="{DynamicResource AccentColorBrush3}" BorderThickness="2" BorderBrush="{DynamicResource AccentColorBrush}">
+			<ItemsControl Padding="5" ItemsSource="{Binding Messages}" Background="{DynamicResource AccentColorBrush3}" BorderThickness="2" BorderBrush="{DynamicResource AccentColorBrush}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Grid>
@@ -59,7 +59,7 @@
 							<Border Style="{StaticResource ChatMessageBorderStyle}" Grid.Column="0" >
 								<TextBlock Style="{StaticResource TextBlockSender}" Text="{Binding MessageTime, StringFormat=\{0:HH:mm:ss\}}" VerticalAlignment="Top"/>
 							</Border>
-                            <Border x:Name="contentBorder" Grid.Column="1" Style="{StaticResource ChatMessageBorderStyle}">
+							<Border x:Name="contentBorder" Grid.Column="1" Style="{StaticResource ChatMessageBorderStyle}">
 								<StackPanel>
 									<TextBlock Style="{StaticResource TextBlockDefault}" Text="{Binding MessageContent}" TextWrapping="Wrap" />
 									<TextBlock Style="{StaticResource TextBlockDefault}" Text="{Binding MessageSender.UserName}" Foreground="{Binding MessageSender.UserRole.RoleColor}" HorizontalAlignment="Right" />
@@ -71,23 +71,23 @@
 			</ItemsControl>
 		</ScrollViewer>
 
-        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="10,10,5,10" Background="{DynamicResource AccentColorBrush3}"
-                 AcceptsReturn="True" Text="{Binding ChatMessage, UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.InputBindings>
-                <KeyBinding Gesture="Shift+Enter" Command="{Binding SendChatMessageCommand}"/>
-            </TextBox.InputBindings>
-        </TextBox>
-        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Background="Gray" ShowsPreview="true" Width="3" HorizontalAlignment="Left" />
+		<TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="10,10,5,10" Background="{DynamicResource AccentColorBrush3}"
+				 AcceptsReturn="True" Text="{Binding ChatMessage, UpdateSourceTrigger=PropertyChanged}">
+			<TextBox.InputBindings>
+				<KeyBinding Gesture="Shift+Enter" Command="{Binding SendChatMessageCommand}"/>
+			</TextBox.InputBindings>
+		</TextBox>
+		<GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Background="Gray" ShowsPreview="true" Width="3" HorizontalAlignment="Left" />
 
-        <Button Grid.Column="3" Grid.Row="2" Width="45" Height="45" Margin="5,0,10,0" Background="{DynamicResource AccentColorBrush3}"
-                Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SendChatMessageCommand}">
-            <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_navigate_next}" />
-                </Rectangle.OpacityMask>
-            </Rectangle>
-        </Button>
-        
+		<Button Grid.Column="3" Grid.Row="2" Width="45" Height="45" Margin="5,0,10,0" Background="{DynamicResource AccentColorBrush3}"
+				Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SendChatMessageCommand}">
+			<Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+				<Rectangle.OpacityMask>
+					<VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_navigate_next}" />
+				</Rectangle.OpacityMask>
+			</Rectangle>
+		</Button>
+		
 		<StatusBar Grid.Row="3" Grid.ColumnSpan="4" Grid.Column="0">
 			<StatusBarItem Content="{Binding ServerInfo}" />
 		</StatusBar>
