@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Windows.Input;
 
     using AutoMapper;
@@ -51,7 +52,7 @@
         public RelayCommand OpenLoginWindowCommand { get; private set; }
 
         public ObservableCollection<ChatMessageModel> Messages { get; private set; }
-
+        
         public string ServerInfo
         {
             get { return this.serverInfo; }
@@ -85,6 +86,10 @@
 
         private void UpdateRooms(List<RoomModel> rooms)
         {
+            var me = rooms.Select(y => y.RoomUsers.FirstOrDefault(z => z.Port == this.network.Port)).FirstOrDefault(y => y != null);
+
+            if (me != null) { me.Me = true; }
+
             Messenger.Default.Send(new NotificationMessage<List<RoomModel>>(rooms, "RoomsWasUpdated"), Token);
         }
 

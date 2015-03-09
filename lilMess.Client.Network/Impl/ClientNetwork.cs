@@ -29,6 +29,8 @@
 
         public RefreshRoomList Refresh { get; set; }
 
+        public int Port { get { return this.client.Port; } }
+
         public void Connect(string ip, int port, string login)
         {
             if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { this.Shutdown(); }

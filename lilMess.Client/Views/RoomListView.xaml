@@ -8,21 +8,26 @@
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding RoomList, Source={StaticResource Locator}}">
     <Grid>
-        <TreeView Grid.Column="0" Grid.RowSpan="3" ItemsSource="{Binding RoomsList}" Background="Transparent" Foreground="Transparent">
+        <TreeView Grid.Column="0" Grid.RowSpan="3" ItemsSource="{Binding RoomsList}" >
+            
             <TreeView.Resources>
                 <BooleanToVisibilityConverter x:Key="BoolToVis" />
                 <HierarchicalDataTemplate DataType="{x:Type model:RoomModel}" ItemsSource="{Binding RoomUsers}">
                     <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Перейти в комнату"/>
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                         <TextBlock Text="{Binding RoomName}" />
-                        <TextBlock Text=" [" Foreground="Blue" />
-                        <TextBlock Text="{Binding RoomUsers.Count}" Foreground="Blue" />
-                        <TextBlock Text="]" Foreground="Blue" />
+                        <TextBlock Text="{Binding RoomUsers.Count, StringFormat=[\{0\}]}" Foreground="Blue" />
                         <TextBlock Text=" H" Visibility="{Binding RoomIsHome, Converter={StaticResource BoolToVis}}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type model:UserModel}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding UserName}" Foreground="{Binding UserRole.RoleColor}"/>
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock Text="{Binding UserName}" Foreground="{Binding UserRole.RoleColor}" />
+                        <TextBlock Text=" [me]" Visibility="{Binding Me, Converter={StaticResource BoolToVis}}" />
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>

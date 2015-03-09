@@ -8,6 +8,8 @@
 
         private RoleModel userRole;
 
+        private int port;
+
         public RoleModel UserRole
         {
             get { return this.userRole; }
@@ -19,5 +21,13 @@
             get { return this.userName; }
             set { this.Set("UserName", ref this.userName, value); }
         }
+
+        public int Port
+        {
+            get { return this.port; }
+            set { this.Set("Port", ref this.port, value); }
+        }
+
+        public bool Me { get; set; }
     }
 }

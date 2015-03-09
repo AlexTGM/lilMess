@@ -61,8 +61,8 @@
 							</Border>
 							<Border x:Name="contentBorder" Grid.Column="1" Style="{StaticResource ChatMessageBorderStyle}">
 								<StackPanel>
-									<TextBlock Style="{StaticResource TextBlockDefault}" Text="{Binding MessageContent}" TextWrapping="Wrap" />
-									<TextBlock Style="{StaticResource TextBlockDefault}" Text="{Binding MessageSender.UserName}" Foreground="{Binding MessageSender.UserRole.RoleColor}" HorizontalAlignment="Right" />
+                                    <TextBox Text="{Binding MessageContent}" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" IsReadOnly="True" />
+                                    <TextBlock Text="{Binding MessageSender.UserName}" Foreground="{Binding MessageSender.UserRole.RoleColor}" HorizontalAlignment="Right" />
 								</StackPanel>
 							</Border>
 						</Grid>

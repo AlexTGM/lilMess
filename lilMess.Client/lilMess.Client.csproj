@@ -49,7 +49,7 @@
     </Reference>
     <Reference Include="Lidgren.Network, Version=2012.1.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lilMess.Server.Network\bin\Debug\Lidgren.Network.dll</HintPath>
+      <HintPath>..\libraries\Lidgren.Network.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.1.1.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

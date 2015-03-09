@@ -12,6 +12,8 @@
 
     public interface INetwork
     {
+        int Port { get; }
+
         RecieveMessage Chat { get; set; }
 
         ReciveAudio Audio { get; set; }
