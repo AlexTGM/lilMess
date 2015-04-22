@@ -61,8 +61,8 @@
 							</Border>
 							<Border x:Name="contentBorder" Grid.Column="1" Style="{StaticResource ChatMessageBorderStyle}">
 								<StackPanel>
-                                    <TextBox Text="{Binding MessageContent}" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" IsReadOnly="True" />
-                                    <TextBlock Text="{Binding MessageSender.UserName}" Foreground="{Binding MessageSender.UserRole.RoleColor}" HorizontalAlignment="Right" />
+									<TextBox Text="{Binding MessageContent}" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" IsReadOnly="True" />
+									<TextBlock Text="{Binding MessageSender.UserName}" Foreground="{Binding MessageSender.UserRole.RoleColor}" HorizontalAlignment="Right" />
 								</StackPanel>
 							</Border>
 						</Grid>
@@ -79,9 +79,9 @@
 		</TextBox>
 		<GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Background="Gray" ShowsPreview="true" Width="3" HorizontalAlignment="Left" />
 
-		<Button Grid.Column="3" Grid.Row="2" Width="45" Height="45" Margin="5,0,10,0" Background="{DynamicResource AccentColorBrush3}"
+		<Button Grid.Column="3" Grid.Row="2" Width="30" Height="30" Margin="5,0,10,0" Background="{DynamicResource AccentColorBrush3}"
 				Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SendChatMessageCommand}">
-			<Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+			<Rectangle Width="15" Height="15" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
 				<Rectangle.OpacityMask>
 					<VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_navigate_next}" />
 				</Rectangle.OpacityMask>

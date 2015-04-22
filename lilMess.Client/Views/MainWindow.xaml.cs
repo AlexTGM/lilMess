@@ -1,10 +1,7 @@
 ﻿namespace lilMess.Client.Views
 {
-    using System.Windows;
-
     using lilMess.Client.ViewModels;
 
-    using MahApps.Metro;
     using MahApps.Metro.Controls;
 
     public partial class MainWindow : MetroWindow

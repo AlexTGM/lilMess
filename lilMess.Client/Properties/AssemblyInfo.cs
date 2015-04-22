@@ -1,17 +1,18 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Resources;
 
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 
-[assembly: AssemblyTitle("lilMess.Client")]
+[assembly: AssemblyTitle("lilMess")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("lilMess.Client")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCompany("lilMess Company")]
+[assembly: AssemblyProduct("lilMess")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -54,3 +55,4 @@ using System.Windows;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguageAttribute("en")]

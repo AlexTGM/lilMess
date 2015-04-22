@@ -1,6 +1,7 @@
 ﻿namespace lilMess.Client.ViewModels
 {
     using System;
+    using System.Globalization;
     using System.Threading.Tasks;
 
     using GalaSoft.MvvmLight;

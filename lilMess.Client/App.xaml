@@ -5,6 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" StartupUri="Views/MainWindow.xaml"
+             
+             LoadCompleted="ApplicationLoadCompleted"
+             
+             
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
@@ -14,12 +18,16 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-
+                
+                <ResourceDictionary Source="Resources/Translations/lang.ru-RU.xaml" />
+                
                 <ResourceDictionary Source="Styles/Others.xaml" />
                 
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
         </ResourceDictionary>
     </Application.Resources>
+    
 </Application>
