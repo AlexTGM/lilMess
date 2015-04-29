@@ -8,5 +8,7 @@
         public string RoleName { get; set; }
 
         public string RoleColor { get; set; }
+
+        public PermissionModel[] Permissions { get; set; }
     }
 }

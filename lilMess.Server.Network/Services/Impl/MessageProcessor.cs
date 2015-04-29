@@ -1,4 +1,4 @@
-﻿namespace lilMess.Server.Network.Services
+﻿namespace lilMess.Server.Network.Services.Impl
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,6 @@
 
     using Lidgren.Network;
 
-    using lilMess.DataAccess;
-    using lilMess.DataAccess.Extensions;
     using lilMess.DataAccess.Models;
     using lilMess.Misc;
     using lilMess.Misc.Model;
@@ -18,13 +16,14 @@
 
     public class MessageProcessor : IMessageProcessor
     {
-        private readonly IUserService userService;
-        private readonly IRepositoryManager manager;
+        private readonly IRoomService roomService;
 
-        public MessageProcessor(IUserService userService, IRepositoryManager manager)
+        private readonly IUserService userService;
+
+        public MessageProcessor(IRoomService roomService, IUserService userService)
         {
+            this.roomService = roomService;
             this.userService = userService;
-            this.manager = manager;
 
             this.Chat = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.ChatMessage,
@@ -53,21 +52,21 @@
 
         public string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login)
         {
-            var user = this.manager.UserRepository.GetOrUpdate(guid, login);
+            var user = this.userService.GetOrUpdate(guid, login);
 
             incomingMessage.SenderConnection.Approve();
 
             var userModel = Mapper.Map<User, UserModel>(user);
             userModel.Connection = incomingMessage.SenderConnection;
 
-            this.userService.AddUser(userModel);
+            this.roomService.AddUser(userModel);
 
             return string.Format("Подключился пользователь {0}", login);
         }
 
         public string GetChatMessage(UserModel user, string message)
         {
-            var sendNewPacket = SendNewPacket;
+            var sendNewPacket = this.SendNewPacket;
 
             var chatMessageModel = new ChatMessageModel { MessageContent = message, MessageSender = user };
             var chatMessage = new ChatMessagePacket(new ChatMessageBody { ChatMessageModel = chatMessageModel });
@@ -78,7 +77,7 @@
 
         public string GetVoiceMessage(UserModel user, byte[] message)
         {
-            var sendNewPacket = SendNewPacket;
+            var sendNewPacket = this.SendNewPacket;
 
             var except = new List<NetConnection> { user.Connection };
 

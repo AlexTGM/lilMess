@@ -8,7 +8,17 @@
     GlowBrush="{DynamicResource AccentColorBrush}"
     WindowStartupLocation="CenterScreen"
     DataContext="{Binding Login, Source={StaticResource Locator}}">
-    
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -28,11 +38,15 @@
         <TextBlock Text="lilMess" TextAlignment="Center" FontSize="32" Grid.Row="0" Grid.ColumnSpan="2" />
 
         <TextBlock Text="{DynamicResource Server}" TextAlignment="Center" FontSize="16" Grid.Row="2" Grid.Column="0" Margin="7,3,7,3" VerticalAlignment="Center" />
-        <TextBox Text="{Binding ServerInfo}" Grid.Row="2" Grid.Column="1" Margin="7,3,7,3" controls:TextBoxHelper.Watermark="127.0.0.1:9997" controls:TextBoxHelper.ClearTextButton="True"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="7,3,7,3" Text="{Binding LoginModel.ServerInfo, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 controls:TextBoxHelper.Watermark="127.0.0.1:9997" controls:TextBoxHelper.ClearTextButton="True"/>
 
         <TextBlock Text="{DynamicResource Login}" TextAlignment="Center" FontSize="16" Grid.Row="3" Grid.Column="0" Margin="7,3,7,3" VerticalAlignment="Center" />
-        <TextBox Text="{Binding UserName}" Grid.Row="3" Grid.Column="1" Margin="7,3,7,3" controls:TextBoxHelper.Watermark="username" controls:TextBoxHelper.ClearTextButton="True"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="7,3,7,3"  Text="{Binding LoginModel.UserName, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 controls:TextBoxHelper.Watermark="username" controls:TextBoxHelper.ClearTextButton="True"/>
 
-        <Button Content="{DynamicResource LoginAction}" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Window}" />
+        <Button Content="{DynamicResource LoginAction}" 
+                Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Command="{Binding LoginCommand}" 
+                CommandParameter="{Binding ElementName=Window}" />
     </Grid>
 </controls:MetroWindow>

@@ -47,6 +47,9 @@
     <Reference Include="GalaSoft.MvvmLight.Platform">
       <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop">
+      <HintPath>..\packages\gong-wpf-dragdrop.0.1.4.3\lib\net40\GongSolutions.Wpf.DragDrop.dll</HintPath>
+    </Reference>
     <Reference Include="Lidgren.Network, Version=2012.1.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Lidgren.Network.dll</HintPath>
@@ -60,6 +63,7 @@
       <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Windows.Interactivity">
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -79,6 +83,10 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Models\ChatMessageModel.cs" />
+    <Compile Include="DragDrop\IDragDropChildenModel.cs" />
+    <Compile Include="DragDrop\IDragDropParentModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\PermissionsModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -174,6 +182,10 @@
     <ProjectReference Include="..\lilMess.Client.Network\lilMess.Client.Network.csproj">
       <Project>{f1d804d9-ab63-407c-9b64-b7ecdf8d18f3}</Project>
       <Name>lilMess.Client.Network</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\lilMess.Mvvm\lilMess.Mvvm.csproj">
+      <Project>{f0845142-7da0-437d-9bf1-72c6f4c01baa}</Project>
+      <Name>lilMess.Mvvm</Name>
     </ProjectReference>
     <ProjectReference Include="..\lilMess.Tools\lilMess.Tools.csproj">
       <Project>{d1c9f546-3db0-4603-af72-b1179e154bb8}</Project>

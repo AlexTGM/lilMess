@@ -1,4 +1,4 @@
-﻿namespace lilMess.Server.Network.Services
+﻿namespace lilMess.Server.Network.Services.Impl
 {
     using System;
     using System.Collections.Generic;
@@ -12,19 +12,18 @@
     using lilMess.Misc.Packets;
     using lilMess.Misc.Packets.Body;
     using lilMess.Misc.Requests;
-    using lilMess.Server.Network.Models;
 
     public class Service : IService
     {
-        private readonly IUserService userService;
+        private readonly IRoomService roomService;
 
         private readonly NetServer server;
 
         private readonly Dictionary<PacketType, Func<Request, string>> methods;
 
-        public Service(IUserService userService, NetServer server, IMessageProcessor messageProcessor)
+        public Service(IRoomService roomService, NetServer server, IMessageProcessor messageProcessor)
         {
-            this.userService = userService;
+            this.roomService = roomService;
             this.server = server;
 
             this.methods = new Dictionary<PacketType, Func<Request, string>>
@@ -36,15 +35,6 @@
 
             messageProcessor.SendNewPacket += this.SendPacket;
         }
-
-        public StatisticsModel Stats
-        {
-            get
-            {
-                return new StatisticsModel(this.server.Statistics.ReceivedBytes, this.server.Statistics.SentBytes);
-            }
-        }
-
         public void StartupServer(ProcessNewMessage processNewMessageDelegate)
         {
             this.server.Start();
@@ -53,7 +43,7 @@
             {
                 var message = this.server.ReadMessage();
 
-                if (message != null) { processNewMessageDelegate.Invoke(message, this.userService.FindUser(message.SenderConnection)); }
+                if (message != null) { processNewMessageDelegate.Invoke(message, this.roomService.FindUser(message.SenderConnection)); }
 
                 Thread.Sleep(100);
             }
@@ -72,9 +62,9 @@
         public string StatusChanged(UserModel user, NetIncomingMessage incomingMessage)
         {
             var status = (NetConnectionStatus)incomingMessage.ReadByte();
-            if (status == NetConnectionStatus.Disconnected && user != null) { this.userService.RemoveUser(user); }
+            if (status == NetConnectionStatus.Disconnected && user != null) { this.roomService.RemoveUser(user); }
 
-            var serverInfo = new ServerInfoPacket(new ServerInfoBody { ServerRooms = this.userService.GetRoomsList() });
+            var serverInfo = new ServerInfoPacket(new ServerInfoBody { ServerRooms = this.roomService.RoomList });
 
             this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(serverInfo), new List<NetConnection>());
 

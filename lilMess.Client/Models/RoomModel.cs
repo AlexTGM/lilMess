@@ -1,10 +1,13 @@
 ﻿namespace lilMess.Client.Models
 {
+    using System;
     using System.Collections.ObjectModel;
 
     using GalaSoft.MvvmLight;
 
-    public class RoomModel : ObservableObject
+    using lilMess.Client.DragDrop;
+
+    public class RoomModel : ObservableObject, IDragDropParentModel
     {
         private string roomName;
 
@@ -15,9 +18,15 @@
         public RoomModel()
         {
             this.RoomUsers = new ObservableCollection<UserModel>();
+
+            this.Children = new ObservableCollection<IDragDropChildenModel>();
         }
 
         public ObservableCollection<UserModel> RoomUsers { get; private set; }
+
+        public ObservableCollection<IDragDropChildenModel> Children { get; private set; }
+
+        public bool CanAcceptChildren { get { return true; } }
 
         public RoomModel RoomParent
         {
@@ -35,6 +44,12 @@
         {
             get { return this.roomName; }
             set { this.Set("RoomName", ref this.roomName, value); }
+        }
+
+        public bool CanBeDragged
+        {
+            get { return true; }
+            set { throw new NotImplementedException(); }
         }
     }
 }

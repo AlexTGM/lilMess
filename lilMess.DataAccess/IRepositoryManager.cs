@@ -11,5 +11,7 @@
         IRepository<Role> RoleRepository { get; }
 
         IRepository<Room> RoomRepository { get; }
+
+        IRepository<Permisson> PermissonRepository { get; }
     }
 }

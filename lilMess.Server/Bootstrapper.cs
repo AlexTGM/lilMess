@@ -1,7 +1,5 @@
 ﻿namespace lilMess.Server
 {
-    using System.Collections.Specialized;
-
     using AutoMapper;
 
     using Lidgren.Network;
@@ -13,6 +11,7 @@
     using lilMess.Server.Network;
     using lilMess.Server.Network.Impl;
     using lilMess.Server.Network.Services;
+    using lilMess.Server.Network.Services.Impl;
     using lilMess.Server.ViewModels;
 
     using Microsoft.Practices.Unity;
@@ -32,6 +31,7 @@
         private void ConfigureContainer()
         {
             this.Container.RegisterType<IRepositoryManager, RepositoryManager>(new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<IRoomService, RoomService>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<IService, Service>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<IStatisticsService, StatisticsService>(new ContainerControlledLifetimeManager());
@@ -68,6 +68,10 @@
             Mapper.CreateMap<Role, RoleModel>()
                 .ForMember(dest => dest.RoleColor, opt => opt.MapFrom(src => src.Color))
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Name));
+
+            Mapper.CreateMap<Permisson, PermissionModel>();
+
+            Mapper.CreateMap<PermissionModel, Permisson>();
 
             Mapper.CreateMap<Network.Models.StatisticsModel, Models.StatisticsModel>();
         }

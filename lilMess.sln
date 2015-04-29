@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		libraries\Lidgren.Network.dll = libraries\Lidgren.Network.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lilMess.Mvvm", "lilMess.Mvvm\lilMess.Mvvm.csproj", "{F0845142-7DA0-437D-9BF1-72C6F4C01BAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{DDD07EA1-AC01-40BD-8DFD-3CC94837CBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDD07EA1-AC01-40BD-8DFD-3CC94837CBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDD07EA1-AC01-40BD-8DFD-3CC94837CBD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0845142-7DA0-437D-9BF1-72C6F4C01BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0845142-7DA0-437D-9BF1-72C6F4C01BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0845142-7DA0-437D-9BF1-72C6F4C01BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0845142-7DA0-437D-9BF1-72C6F4C01BAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

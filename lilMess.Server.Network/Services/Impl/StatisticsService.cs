@@ -1,4 +1,4 @@
-﻿namespace lilMess.Server.Network.Services
+﻿namespace lilMess.Server.Network.Services.Impl
 {
     using System.Threading;
 

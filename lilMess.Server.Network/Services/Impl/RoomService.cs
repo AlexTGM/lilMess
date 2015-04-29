@@ -1,4 +1,4 @@
-﻿namespace lilMess.Server.Network.Services
+﻿namespace lilMess.Server.Network.Services.Impl
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -10,16 +10,18 @@
     using lilMess.DataAccess;
     using lilMess.Misc.Model;
 
-    public class UserService : IUserService
+    public class RoomService : IRoomService
     {
         private readonly List<RoomModel> rooms = new List<RoomModel>();
 
-        public UserService(IRepositoryManager manager)
+        public RoomService(IRepositoryManager manager)
         {
             var roomList = manager.RoomRepository.Select(x => x);
 
             this.rooms.AddRange(Mapper.Map<IEnumerable<RoomModel>>(roomList));
         }
+
+        public List<RoomModel> RoomList { get { return this.rooms; } }
 
         public void AddUser(UserModel user, RoomModel room = null)
         {
@@ -36,9 +38,10 @@
             foreach (var room in this.rooms.Where(room => room.RoomUsers.Contains(user))) room.RoomUsers.Remove(user);
         }
 
-        public List<RoomModel> GetRoomsList()
+        public void MoveUserToRoom(UserModel user, RoomModel currentRoom, RoomModel destinationRoom)
         {
-            return this.rooms.ToList();
+            currentRoom.RoomUsers.Remove(user);
+            destinationRoom.RoomUsers.Add(user);
         }
     }
 }

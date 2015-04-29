@@ -41,6 +41,7 @@
             Mapper.CreateMap<Misc.Model.RoomModel, Models.RoomModel>();
             Mapper.CreateMap<Misc.Model.RoleModel, Models.RoleModel>();
             Mapper.CreateMap<Misc.Model.UserModel, Models.UserModel>();
+            Mapper.CreateMap<Misc.Model.PermissionModel, Models.PermissionsModel>();
 
             Mapper.CreateMap<Misc.Model.ChatMessageModel, Models.ChatMessageModel>()
                 .ForMember(dest => dest.MessageTime, opt => opt.MapFrom(dest => DateTime.Now));
