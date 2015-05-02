@@ -9,17 +9,17 @@
     using lilMess.Misc.Model;
     using lilMess.Misc.Requests;
 
-    public delegate void SendNewPacket(byte[] data, List<NetConnection> exceptRecipients);
+    public delegate void SendNewPacket(byte[] data, UserModel user, List<NetConnection> except = null);
 
     public interface IMessageProcessor
     {
         SendNewPacket SendNewPacket { get; set; }
 
-        KeyValuePair<PacketType, Func<Request, string>> Chat { get; set; }
+        KeyValuePair<PacketType, Func<Request, string>> Chat { get; }
 
-        KeyValuePair<PacketType, Func<Request, string>> Audio { get; set; }
+        KeyValuePair<PacketType, Func<Request, string>> Audio { get; }
 
-        KeyValuePair<PacketType, Func<Request, string>> Connection { get; set; }
+        KeyValuePair<PacketType, Func<Request, string>> Connection { get; }
 
         string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login);
 

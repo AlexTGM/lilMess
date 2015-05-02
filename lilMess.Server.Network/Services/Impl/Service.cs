@@ -66,23 +66,27 @@
 
             var serverInfo = new ServerInfoPacket(new ServerInfoBody { ServerRooms = this.roomService.RoomList });
 
-            this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(serverInfo), new List<NetConnection>());
+            this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(serverInfo));
 
             return string.Format("Пользователь {0} теперь имеет статус {1}", incomingMessage.SenderConnection, status);
         }
 
-        private void SendPacket(byte[] data, List<NetConnection> except)
+        private void SendPacket(byte[] data, UserModel sender = null, List<NetConnection> except = null)
         {
-            var recipients = this.server.Connections.Except(except).ToList();
+            var userCurrentRoom = this.roomService.GetUserCurrentRoom(sender);
+
+            var connectionsList = userCurrentRoom == null 
+                ? this.server.Connections.ToList()
+                : userCurrentRoom.RoomUsers.Select(x => x.Connection);
+
+            var recipients = connectionsList.Except(except ?? new List<NetConnection>()).ToList();
 
             if (!recipients.Any()) { return; }
 
             var outgoingMessage = this.server.CreateMessage();
 
-            var sendBuffer = new NetBuffer();
-            sendBuffer.Write(data);
+            outgoingMessage.Write(data);
 
-            outgoingMessage.Write(sendBuffer);
             this.server.SendMessage(outgoingMessage, recipients, NetDeliveryMethod.ReliableOrdered, 0);
         }
     }

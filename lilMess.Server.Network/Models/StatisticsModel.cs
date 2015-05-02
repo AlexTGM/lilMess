@@ -10,9 +10,9 @@
             this.OutcomingTraffic = outcoming;
         }
 
-        public long IncomingTraffic { get; private set; }
+        private long IncomingTraffic { get; set; }
 
-        public long OutcomingTraffic { get; private set; }
+        private long OutcomingTraffic { get; set; }
 
         public static StatisticsModel operator -(StatisticsModel obj1, StatisticsModel obj2)
         {

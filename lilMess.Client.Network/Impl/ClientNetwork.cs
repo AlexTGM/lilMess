@@ -79,10 +79,7 @@
         {
             var outgoingMessage = this.client.CreateMessage();
 
-            var sendBuffer = new NetBuffer();
-            sendBuffer.Write(data);
-
-            outgoingMessage.Write(sendBuffer);
+            outgoingMessage.Write(data);
 
             this.client.SendMessage(outgoingMessage, NetDeliveryMethod.ReliableOrdered);
         }

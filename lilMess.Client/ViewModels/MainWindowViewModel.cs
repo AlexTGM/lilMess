@@ -37,8 +37,8 @@
             this.Messages = new ObservableCollection<ChatMessageModel>();
 
             this.SendChatMessageCommand = new RelayCommand(this.SendTypedMessage, this.CanSendMessage);
-            this.OpenLoginWindowCommand = new RelayCommand(this.ShowLoginWindow);
-            this.OpenGitRepositoryCommand = new RelayCommand(this.OpenGitRepository);
+            this.OpenLoginWindowCommand = new RelayCommand(ShowLoginWindow);
+            this.OpenGitRepositoryCommand = new RelayCommand(OpenGitRepository);
 
             this.network.Chat += message => this.Messages.Add(Mapper.Map<ChatMessageModel>(message));
             this.network.Audio += message => this.audioProcessor.Translate(message);
@@ -86,6 +86,16 @@
             if (e.Key == Key.F2) { this.audioProcessor.StopRecording(); }
         }
 
+        private static void OpenGitRepository()
+        {
+            System.Diagnostics.Process.Start("https://github.com/AlexTGM/lilMess");
+        }
+
+        private static void ShowLoginWindow()
+        {
+            new LoginWindow().ShowDialog();
+        }
+
         private void UpdateRooms(List<RoomModel> rooms)
         {
             this.loggedUser = rooms.Select(y => y.RoomUsers.FirstOrDefault(z => z.Port == this.network.Port)).FirstOrDefault(y => y != null);
@@ -104,16 +114,6 @@
         private void UpdateConnectionInfo(NotificationMessage message)
         {
             this.ServerInfo = string.Format("Connected to: {0}", message.Notification);
-        }
-
-        private void ShowLoginWindow()
-        {
-            new LoginWindow().ShowDialog();
-        }
-
-        private void OpenGitRepository()
-        {
-            System.Diagnostics.Process.Start("https://github.com/AlexTGM/lilMess");
         }
 
         private bool CanSendMessage()

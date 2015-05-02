@@ -43,5 +43,10 @@
             currentRoom.RoomUsers.Remove(user);
             destinationRoom.RoomUsers.Add(user);
         }
+
+        public RoomModel GetUserCurrentRoom(UserModel user)
+        {
+            return this.RoomList.SingleOrDefault(room => room.RoomUsers.Contains(user));
+        }
     }
 }

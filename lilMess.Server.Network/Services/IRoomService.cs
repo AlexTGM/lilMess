@@ -17,5 +17,7 @@
         void RemoveUser(UserModel user);
 
         void MoveUserToRoom(UserModel user, RoomModel currentRoom, RoomModel destinationRoom);
+
+        RoomModel GetUserCurrentRoom(UserModel uiserModel);
     }
 }

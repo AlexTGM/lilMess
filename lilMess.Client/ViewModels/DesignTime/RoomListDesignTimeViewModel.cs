@@ -1,10 +1,8 @@
 ﻿namespace lilMess.Client.ViewModels.DesignTime
 {
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     using GalaSoft.MvvmLight;
-    using GalaSoft.MvvmLight.Messaging;
 
     using lilMess.Client.Models;
 

@@ -27,7 +27,10 @@
 
             this.Chat = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.ChatMessage,
-                request => this.GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).ChatMessageModel.MessageContent));
+                request =>
+                this.GetChatMessage(
+                    request.UserModel,
+                    ((ChatMessageBody)request.Body).ChatMessageModel.MessageContent));
 
             this.Audio = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.VoiceMessage,
@@ -44,11 +47,11 @@
 
         public SendNewPacket SendNewPacket { get; set; }
 
-        public KeyValuePair<PacketType, Func<Request, string>> Chat { get; set; }
+        public KeyValuePair<PacketType, Func<Request, string>> Chat { get; private set; }
 
-        public KeyValuePair<PacketType, Func<Request, string>> Audio { get; set; }
+        public KeyValuePair<PacketType, Func<Request, string>> Audio { get; private set; }
 
-        public KeyValuePair<PacketType, Func<Request, string>> Connection { get; set; }
+        public KeyValuePair<PacketType, Func<Request, string>> Connection { get; private set; }
 
         public string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login)
         {
@@ -67,10 +70,12 @@
         public string GetChatMessage(UserModel user, string message)
         {
             var sendNewPacket = this.SendNewPacket;
+            if (sendNewPacket == null) return string.Empty;
 
             var chatMessageModel = new ChatMessageModel { MessageContent = message, MessageSender = user };
             var chatMessage = new ChatMessagePacket(new ChatMessageBody { ChatMessageModel = chatMessageModel });
-            if (sendNewPacket != null) { sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage), new List<NetConnection>()); }
+
+            sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage), user);
 
             return string.Format("Сообщение от {0}: {1}", user.UserName, message);
         }
@@ -78,11 +83,12 @@
         public string GetVoiceMessage(UserModel user, byte[] message)
         {
             var sendNewPacket = this.SendNewPacket;
+            if (sendNewPacket == null) return string.Empty;
 
             var except = new List<NetConnection> { user.Connection };
 
             var voiceMessage = new VoiceMessagePacket(new VoiceMessageBody { Message = message });
-            if (sendNewPacket != null) { sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(voiceMessage), except); }
+            sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(voiceMessage), user, except);
 
             return string.Format("Пользователь {0} начал запись голосового сообщения", user.UserName);
         }
