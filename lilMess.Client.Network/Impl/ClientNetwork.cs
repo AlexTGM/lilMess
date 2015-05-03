@@ -20,7 +20,7 @@
         public ClientNetwork(NetClient client)
         {
             this.client = client;
-            this.client.RegisterReceivedCallback(this.Callback);
+            this.client.RegisterReceivedCallback(Callback);
         }
 
         public RecieveMessage Chat { get; set; }
@@ -29,13 +29,13 @@
 
         public RefreshRoomList Refresh { get; set; }
 
-        public int Port { get { return this.client.Port; } }
+        public int Port { get { return client.Port; } }
 
         public void Connect(string ip, int port, string login)
         {
-            if (this.client.ConnectionStatus == NetConnectionStatus.Connected) { this.Shutdown(); }
+            if (client.ConnectionStatus == NetConnectionStatus.Connected) { Shutdown(); }
 
-            this.client.Start();
+            client.Start();
 
             var authenticationPacketBody = new AuthenticationBody { Login = login, Guid = Guid.GetUniqueHardwareId() };
             var auth = new AuthenticationPacket(authenticationPacketBody);
@@ -43,61 +43,61 @@
             var sendBuffer = new NetBuffer();
             sendBuffer.Write(Serializer<AuthenticationPacket>.SerializeObject(auth));
 
-            var outMesssage = this.client.CreateMessage();
+            var outMesssage = client.CreateMessage();
             outMesssage.Write(sendBuffer);
 
-            this.client.Connect(ip, port, outMesssage);
+            client.Connect(ip, port, outMesssage);
         }
 
         public void Shutdown()
         {
-            this.client.Disconnect("Requested by user");
+            client.Disconnect("Requested by user");
         }
 
         public void SendChatMessage(string message)
         {
             var chatMessage = new ChatMessagePacket(new ChatMessageBody { ChatMessageModel = new ChatMessageModel { MessageContent = message } });
 
-            this.SendPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage));
+            SendPacket(Serializer<ChatMessagePacket>.SerializeObject(chatMessage));
         }
 
         public void SendVoiceMessage(byte[] message)
         {
             var voiceMessage = new VoiceMessagePacket(new VoiceMessageBody { Message = message });
 
-            this.SendPacket(Serializer<VoiceMessagePacket>.SerializeObject(voiceMessage));
+            SendPacket(Serializer<VoiceMessagePacket>.SerializeObject(voiceMessage));
         }
 
         private void Callback(object peer)
         {
             NetIncomingMessage incomingMessage;
 
-            while ((incomingMessage = this.client.ReadMessage()) != null) { this.ReadMessage(incomingMessage); }
+            while ((incomingMessage = client.ReadMessage()) != null) { ReadMessage(incomingMessage); }
         }
 
         private void SendPacket(byte[] data)
         {
-            var outgoingMessage = this.client.CreateMessage();
+            var outgoingMessage = client.CreateMessage();
 
             outgoingMessage.Write(data);
 
-            this.client.SendMessage(outgoingMessage, NetDeliveryMethod.ReliableOrdered);
+            client.SendMessage(outgoingMessage, NetDeliveryMethod.ReliableOrdered);
         }
 
         private void AddNewRoomRange(IEnumerable<RoomModel> rooms)
         {
-            var refresh = this.Refresh;
+            var refresh = Refresh;
 
-            this.roomsList.Clear();
-            this.roomsList.AddRange(rooms);
+            roomsList.Clear();
+            roomsList.AddRange(rooms);
 
-            if (refresh != null) refresh(this.roomsList);
+            if (refresh != null) refresh(roomsList);
         }
 
         private void ReadMessage(NetIncomingMessage incomingMessage)
         {
-            var chat = this.Chat;
-            var audio = this.Audio;
+            var chat = Chat;
+            var audio = Audio;
 
             switch (incomingMessage.MessageType)
             {
@@ -105,14 +105,14 @@
                 case NetIncomingMessageType.ErrorMessage:
                 case NetIncomingMessageType.WarningMessage:
                 case NetIncomingMessageType.VerboseDebugMessage:
-                    if (chat != null) { chat(this.SystemMessage(incomingMessage.ReadString())); }
+                    if (chat != null) { chat(SystemMessage(incomingMessage.ReadString())); }
 
                     break;
                 case NetIncomingMessageType.StatusChanged:
                     {
                         var status = (NetConnectionStatus)incomingMessage.ReadByte();
                         var reason = incomingMessage.ReadString();
-                        if (chat != null) { chat(this.SystemMessage(string.Format("{0} : {1}", status, reason))); }
+                        if (chat != null) { chat(SystemMessage(string.Format("{0} : {1}", status, reason))); }
 
                         break;
                     }
@@ -136,7 +136,7 @@
                         case (byte)PacketType.ServerMessage:
 
                             var rooms = ((ServerInfoBody)packet.PacketBody).ServerRooms;
-                            this.AddNewRoomRange(rooms.ToArray());
+                            AddNewRoomRange(rooms.ToArray());
                             break;
                     }
 
@@ -144,7 +144,7 @@
 
                 default:
                     {
-                        if (chat != null) { chat(this.SystemMessage(string.Format("Unhandled type: {0}", incomingMessage.MessageType))); }
+                        if (chat != null) { chat(SystemMessage(string.Format("Unhandled type: {0}", incomingMessage.MessageType))); }
 
                         break;
                     }

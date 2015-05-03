@@ -2,11 +2,11 @@
 {
     using MahApps.Metro.Controls;
 
-    public partial class LoginWindow : MetroWindow
+    public partial class LoginWindow
     {
         public LoginWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

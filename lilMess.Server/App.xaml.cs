@@ -3,11 +3,11 @@
     using System.Windows;
     using System.Windows.Threading;
 
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {
-            this.Dispatcher.UnhandledException += this.OnDispatcherUnhandledException;
+            Dispatcher.UnhandledException += OnDispatcherUnhandledException;
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

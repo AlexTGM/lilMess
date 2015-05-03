@@ -16,33 +16,30 @@
 
     public class MessageProcessor : IMessageProcessor
     {
-        private readonly IRoomService roomService;
+        private readonly IRoomService _roomService;
 
-        private readonly IUserService userService;
+        private readonly IUserService _userService;
 
         public MessageProcessor(IRoomService roomService, IUserService userService)
         {
-            this.roomService = roomService;
-            this.userService = userService;
+            _roomService = roomService;
+            _userService = userService;
 
-            this.Chat = new KeyValuePair<PacketType, Func<Request, string>>(
+            Chat = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.ChatMessage,
-                request =>
-                this.GetChatMessage(
-                    request.UserModel,
-                    ((ChatMessageBody)request.Body).ChatMessageModel.MessageContent));
+                request => GetChatMessage(request.UserModel, ((ChatMessageBody)request.Body).ChatMessageModel.MessageContent));
 
-            this.Audio = new KeyValuePair<PacketType, Func<Request, string>>(
+            Audio = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.VoiceMessage,
-                request => this.GetVoiceMessage(request.UserModel, ((VoiceMessageBody)request.Body).Message));
+                request => GetVoiceMessage(request.UserModel, ((VoiceMessageBody)request.Body).Message));
 
-            this.Connection = new KeyValuePair<PacketType, Func<Request, string>>(
+            Connection = new KeyValuePair<PacketType, Func<Request, string>>(
                 PacketType.LogIn,
-                request =>
-                    {
-                        var body = (AuthenticationBody)request.Body;
-                        return this.ConnectionApproval(request.IncomingMessage, body.Guid, body.Login);
-                    });
+                request => ConnectionApproval(request.IncomingMessage, (AuthenticationBody)request.Body));
+
+            Move = new KeyValuePair<PacketType, Func<Request, string>>(
+                PacketType.ServerMessage,
+                request => MoveUser(request.UserModel, (AuthenticationBody)request.Body));
         }
 
         public SendNewPacket SendNewPacket { get; set; }
@@ -53,23 +50,25 @@
 
         public KeyValuePair<PacketType, Func<Request, string>> Connection { get; private set; }
 
-        public string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login)
+        public KeyValuePair<PacketType, Func<Request, string>> Move { get; private set; } 
+
+        public string ConnectionApproval(NetIncomingMessage incomingMessage, AuthenticationBody body)
         {
-            var user = this.userService.GetOrUpdate(guid, login);
+            var user = _userService.GetOrUpdate(body.Guid, body.Login);
 
             incomingMessage.SenderConnection.Approve();
 
             var userModel = Mapper.Map<User, UserModel>(user);
             userModel.Connection = incomingMessage.SenderConnection;
 
-            this.roomService.AddUser(userModel);
+            _roomService.AddUser(userModel);
 
-            return string.Format("Подключился пользователь {0}", login);
+            return string.Format("Подключился пользователь {0}", body.Login);
         }
 
         public string GetChatMessage(UserModel user, string message)
         {
-            var sendNewPacket = this.SendNewPacket;
+            var sendNewPacket = SendNewPacket;
             if (sendNewPacket == null) return string.Empty;
 
             var chatMessageModel = new ChatMessageModel { MessageContent = message, MessageSender = user };
@@ -82,7 +81,7 @@
 
         public string GetVoiceMessage(UserModel user, byte[] message)
         {
-            var sendNewPacket = this.SendNewPacket;
+            var sendNewPacket = SendNewPacket;
             if (sendNewPacket == null) return string.Empty;
 
             var except = new List<NetConnection> { user.Connection };
@@ -91,6 +90,20 @@
             sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(voiceMessage), user, except);
 
             return string.Format("Пользователь {0} начал запись голосового сообщения", user.UserName);
+        }
+
+        public string MoveUser(UserModel user, RoomModel destinationRoom)
+        {
+            var sendNewPacket = SendNewPacket;
+            if (sendNewPacket == null) return string.Empty;
+
+            _roomService.MoveUserToRoom(user, destinationRoom);
+
+            var serverInfo = new ServerInfoPacket(new ServerInfoBody { ServerRooms = _roomService.RoomList });
+
+            sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(serverInfo));
+
+            return string.Format("Пользователь {0} теперь находится в канале {1}", user.UserName, destinationRoom.RoomName);
         }
     }
 }

@@ -8,20 +8,16 @@ namespace lilMess.Client.Models
 
         private bool permittingPrivilege;
 
-        public PermissionsModel()
-        {
-        }
-
         public string PrivilegeName
         {
-            get { return this.privilegeName; }
-            set { this.Set("PrivilegeName", ref this.privilegeName, value); }
+            get { return privilegeName; }
+            set { Set("PrivilegeName", ref privilegeName, value); }
         }
 
         public bool PermittingPrivilege
         {
-            get { return this.permittingPrivilege; }
-            set { this.Set("PermittingPrivilege", ref this.permittingPrivilege, value); }
+            get { return permittingPrivilege; }
+            set { Set("PermittingPrivilege", ref permittingPrivilege, value); }
         }
     }
 }

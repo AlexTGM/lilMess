@@ -8,12 +8,12 @@
     {
         public UncompressedPcmChatCodec()
         {
-            this.RecordFormat = new WaveFormat(8000, 16, 1);
+            RecordFormat = new WaveFormat(8000, 16, 1);
         }
 
         public string Name { get { return "PCM 8kHz 16 bit uncompressed"; } }
 
-        public int BitsPerSecond { get { return this.RecordFormat.AverageBytesPerSecond * 8; } }
+        public int BitsPerSecond { get { return RecordFormat.AverageBytesPerSecond * 8; } }
 
         public WaveFormat RecordFormat { get; private set; }
 

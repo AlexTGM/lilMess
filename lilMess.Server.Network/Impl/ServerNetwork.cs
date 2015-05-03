@@ -16,8 +16,8 @@
 
         public ServerNetwork(IService service, IStatisticsService statisticsService)
         {
-            this.Service = service;
-            this.StatisticsService = statisticsService;
+            Service = service;
+            StatisticsService = statisticsService;
         }
 
         public IStatisticsService StatisticsService { get; private set; }
@@ -28,15 +28,15 @@
         
         public string StartupServer()
         {
-            Task.Run(() => this.Service.StartupServer(this.ProcessMessage), this.cts.Token);
+            Task.Run(() => Service.StartupServer(ProcessMessage), cts.Token);
 
             return string.Format("Прослушиваем порт {0}", 9997);
         }
 
         public void ShutdownServer()
         {
-            this.cts.Cancel();
-            this.Service.ShutdownServer();
+            cts.Cancel();
+            Service.ShutdownServer();
         }
 
         private void ProcessMessage(NetIncomingMessage incomingMessage, UserModel user)
@@ -51,11 +51,11 @@
 
                     var request = new Request { IncomingMessage = incomingMessage, UserModel = user, Body = packet.PacketBody };
 
-                    if (message != null) { message(this.Service.InvokeMethod(packet, request)); }
+                    if (message != null) { message(Service.InvokeMethod(packet, request)); }
                     break;
 
                 case NetIncomingMessageType.StatusChanged:
-                    if (message != null) { message(this.Service.StatusChanged(user, incomingMessage)); }
+                    if (message != null) { message(Service.StatusChanged(user, incomingMessage)); }
                     break;
 
                 default:

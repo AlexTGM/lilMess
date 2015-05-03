@@ -11,7 +11,7 @@
     {
         public string Name { get { return "G.711 mu-law"; } }
 
-        public int BitsPerSecond { get { return this.RecordFormat.SampleRate * 8; } }
+        public int BitsPerSecond { get { return RecordFormat.SampleRate * 8; } }
 
         public WaveFormat RecordFormat { get { return new WaveFormat(8000, 16, 1); } }
 

@@ -8,10 +8,6 @@
 
     public class RoomListDesignTimeViewModel : ViewModelBase
     {
-        public RoomListDesignTimeViewModel()
-        {
-        }
-
         public ObservableCollection<RoomModel> RoomsList
         {
             get
@@ -25,7 +21,7 @@
                                     };
 
 
-                var homeRoom = new RoomModel { RoomIsHome = true, RoomName = "Home Room", RoomParent = null, };
+                var homeRoom = new RoomModel { RoomIsHome = true, RoomName = "Home Room", RoomParent = null };
                 homeRoom.RoomUsers.Add(admin);
 
 

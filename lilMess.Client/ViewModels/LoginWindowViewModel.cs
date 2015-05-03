@@ -20,10 +20,10 @@
         {
             this.network = network;
 
-            this.LoginModel = new LoginModel();
-            this.LoginModel.ErrorsChanged += (sender, args) => this.LoginCommand.RaiseCanExecuteChanged();
+            LoginModel = new LoginModel();
+            LoginModel.ErrorsChanged += (sender, args) => LoginCommand.RaiseCanExecuteChanged();
 
-            this.LoginCommand = new RelayCommand<object>(this.TryLogin, o => !this.LoginModel.HasErrors);
+            LoginCommand = new RelayCommand<object>(TryLogin, o => !LoginModel.HasErrors);
         }
 
         public LoginModel LoginModel { get; set; }
@@ -32,9 +32,9 @@
 
         private void TryLogin(object param)
         {
-            this.network.Connect(this.LoginModel.Address.Ip, this.LoginModel.Address.Port, this.LoginModel.UserName);
+            network.Connect(LoginModel.Address.Ip, LoginModel.Address.Port, LoginModel.UserName);
 
-            Messenger.Default.Send(new NotificationMessage(this.LoginModel.ServerInfo), Token);
+            Messenger.Default.Send(new NotificationMessage(LoginModel.ServerInfo), Token);
 
             ((LoginWindow)param).Hide();
         }

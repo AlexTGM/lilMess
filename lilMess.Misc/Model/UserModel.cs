@@ -33,36 +33,36 @@
 
         public NetConnection Connection
         {
-            get { return this.connection; }
+            get { return connection; }
             set
             {
-                this.connection = value;
-                this.Port = this.Connection.RemoteEndPoint.Port;
+                connection = value;
+                Port = Connection.RemoteEndPoint.Port;
             }
         }
 
         public RoleModel UserRole
         {
-            get { return this.userRole; }
-            set { this.userRole = value; }
+            get { return userRole; }
+            set { userRole = value; }
         }
 
         public string UserName
         {
-            get { return this.userName; }
-            set { this.userName = value; }
+            get { return userName; }
+            set { userName = value; }
         }
 
         public string Guid
         {
-            get { return this.guid; }
-            set { this.guid = value; }
+            get { return guid; }
+            set { guid = value; }
         }
 
         public int Port
         {
-            get { return this.port; }
-            set { this.port = value; }
+            get { return port; }
+            set { port = value; }
         }
     }
 }

@@ -12,19 +12,19 @@
 
         public RoleModel()
         {
-            this.Permissions = new ObservableCollection<PermissionsModel>();
+            Permissions = new ObservableCollection<PermissionsModel>();
         }
 
         public string RoleColor
         {
-            get { return this.roleColor; }
-            set { this.Set("RoleColor", ref this.roleColor, value); }
+            get { return roleColor; }
+            set { Set("RoleColor", ref roleColor, value); }
         }
 
         public string RoleName
         {
-            get { return this.roleName; }
-            set { this.Set("RoleName", ref this.roleName, value); }
+            get { return roleName; }
+            set { Set("RoleName", ref roleName, value); }
         }
 
         public ObservableCollection<PermissionsModel> Permissions { get; set; }

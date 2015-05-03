@@ -20,31 +20,31 @@
     {
         public Bootstrapper()
         {
-            this.Container = new UnityContainer();
+            Container = new UnityContainer();
 
-            this.ConfigureContainer();
-            this.ConfigureBindings();
+            ConfigureContainer();
+            ConfigureBindings();
         }
 
         public IUnityContainer Container { get; private set; }
 
         private void ConfigureContainer()
         {
-            this.Container.RegisterType<IRepositoryManager, RepositoryManager>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IRoomService, RoomService>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IService, Service>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IStatisticsService, StatisticsService>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<INetwork, ServerNetwork>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IMessageProcessor, MessageProcessor>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IRepositoryManager, RepositoryManager>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IRoomService, RoomService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IUserService, UserService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IService, Service>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IStatisticsService, StatisticsService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<INetwork, ServerNetwork>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IMessageProcessor, MessageProcessor>(new ContainerControlledLifetimeManager());
 
-            this.Container.RegisterType<MainWindowViewModel>();
-            this.Container.RegisterType<StatisticsVeiewModel>();
+            Container.RegisterType<MainWindowViewModel>();
+            Container.RegisterType<StatisticsVeiewModel>();
 
             var config = new NetPeerConfiguration("lilMess") { MaximumConnections = 100, Port = 9997 };
             config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
 
-            this.Container.RegisterInstance(typeof(NetServer), new NetServer(config), new ContainerControlledLifetimeManager());
+            Container.RegisterInstance(typeof(NetServer), new NetServer(config), new ContainerControlledLifetimeManager());
         }
 
         private void ConfigureBindings()

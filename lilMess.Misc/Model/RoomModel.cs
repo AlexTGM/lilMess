@@ -8,7 +8,7 @@
     {
         public RoomModel()
         {
-            this.RoomUsers = new ObservableCollection<UserModel>();
+            RoomUsers = new ObservableCollection<UserModel>();
         }
 
         public string RoomName { get; set; }

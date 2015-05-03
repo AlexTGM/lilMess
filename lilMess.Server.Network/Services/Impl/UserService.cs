@@ -15,7 +15,7 @@
 
         public User GetOrUpdate(string guid, string login)
         {
-            return this.manager.UserRepository.GetOrUpdate(guid, login);
+            return manager.UserRepository.GetOrUpdate(guid, login);
         }
     }
 }

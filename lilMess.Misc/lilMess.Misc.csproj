@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\MessageModel.cs" />
+    <Compile Include="Model\MoveUserModel.cs" />
     <Compile Include="Model\PermissionModel.cs" />
     <Compile Include="Model\RoleModel.cs" />
     <Compile Include="Model\RoomModel.cs" />
@@ -51,6 +52,8 @@
     <Compile Include="Packets\Body\VoiceMessageBody.cs" />
     <Compile Include="Packets\ChatMessage.cs" />
     <Compile Include="Packet.cs" />
+    <Compile Include="Packets\Body\MoveUserBody.cs" />
+    <Compile Include="Packets\MoveUserPacket.cs" />
     <Compile Include="Packets\ServerInfoPacket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\Request.cs" />

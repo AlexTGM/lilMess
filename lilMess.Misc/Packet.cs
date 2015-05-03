@@ -9,26 +9,26 @@
         ChatMessage = 1,
         VoiceMessage = 2,
         LogIn = 3,
-        ServerMessage = 5,
+        ServerMessage = 5
     }
 
     [Serializable]
     public abstract class Packet
     {
-        private readonly byte packetType;
+        private readonly byte _packetType;
 
-        private readonly Body packetBody;
+        private readonly Body _packetBody;
 
         protected Packet() { }
 
         protected Packet(byte packetType, Body packetBody)
         {
-            this.packetType = packetType;
-            this.packetBody = packetBody;
+            _packetType = packetType;
+            _packetBody = packetBody;
         }
 
-        public byte PacketType { get { return this.packetType; } }
+        public byte PacketType { get { return _packetType; } }
 
-        public Body PacketBody { get { return this.packetBody; } }
+        public Body PacketBody { get { return _packetBody; } }
     }
 }

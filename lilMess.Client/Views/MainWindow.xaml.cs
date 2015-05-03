@@ -7,21 +7,21 @@
     using MahApps.Metro;
     using MahApps.Metro.Controls;
 
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow
     {
         public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             var theme = ThemeManager.GetAppTheme("BaseLight");
             var accent = ThemeManager.GetAccent("Pink");
             ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
 
-            var viewModel = (MainWindowViewModel)this.DataContext;
+            var viewModel = (MainWindowViewModel)DataContext;
 
-            this.KeyDown += viewModel.OnKeyDown;
-            this.KeyUp += viewModel.OnKeyUp;
-            this.Closed += viewModel.OnWindowClosing;
+            KeyDown += viewModel.OnKeyDown;
+            KeyUp += viewModel.OnKeyUp;
+            Closed += viewModel.OnWindowClosing;
         }
     }
 }

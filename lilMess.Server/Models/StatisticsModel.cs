@@ -11,36 +11,36 @@
         private long incomingTraffic, outcomingTraffic;
         private float cpuLoad, memLoad;
 
-        private StatisticsModel() { this.Time = DateTime.Now; }
+        private StatisticsModel() { Time = DateTime.Now; }
 
         public DateTime Time
         {
-            get { return this.time; }
-            set { this.Set("Time", ref this.time, value); }
+            get { return time; }
+            set { Set("Time", ref time, value); }
         }
 
         public long IncomingTraffic
         {
-            get { return this.incomingTraffic; }
-            set { this.Set("IncomingTraffic", ref this.incomingTraffic, value); }
+            get { return incomingTraffic; }
+            set { Set("IncomingTraffic", ref incomingTraffic, value); }
         }
 
         public long OutcomingTraffic
         {
-            get { return this.outcomingTraffic; }
-            set { this.Set("OutcomingTraffic", ref this.outcomingTraffic, value); }
+            get { return outcomingTraffic; }
+            set { Set("OutcomingTraffic", ref outcomingTraffic, value); }
         }
 
         public float CpuLoad
         {
-            get { return this.cpuLoad; }
-            set { this.Set("CpuLoad", ref this.cpuLoad, value); }
+            get { return cpuLoad; }
+            set { Set("CpuLoad", ref cpuLoad, value); }
         }
 
         public float MemLoad
         {
-            get { return this.memLoad; }
-            set { this.Set("MemLoad", ref this.memLoad, value); }
+            get { return memLoad; }
+            set { Set("MemLoad", ref memLoad, value); }
         }
     }
 }

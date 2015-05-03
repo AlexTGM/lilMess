@@ -8,7 +8,7 @@
     using System.Windows;
     using System.Windows.Threading;
 
-    public partial class App : Application
+    public partial class App
     {
         private const string ResFolder = "Resources/Translations";
 
@@ -16,15 +16,15 @@
 
         public App()
         {
-            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
+            Dispatcher.UnhandledException += OnDispatcherUnhandledException;
 
-            LanguageChanged += this.App_LanguageChanged;
+            LanguageChanged += App_LanguageChanged;
 
             AvaiableCultures = new List<CultureInfo>();
 
             Language = Thread.CurrentThread.CurrentUICulture;
 
-            AvaiableCultures = new List<CultureInfo>() { new CultureInfo("en-US"), new CultureInfo("ru-RU") };
+            AvaiableCultures = new List<CultureInfo> { new CultureInfo("en-US"), new CultureInfo("ru-RU") };
         }
 
         public static List<CultureInfo> AvaiableCultures { get; private set; }
@@ -58,7 +58,7 @@
                     merged.Add(dictionary);
                 }
 
-                LanguageChanged(Application.Current, new EventArgs());
+                LanguageChanged(Current, new EventArgs());
             }
         }
 

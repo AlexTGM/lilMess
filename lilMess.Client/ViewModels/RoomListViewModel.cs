@@ -19,13 +19,13 @@
 
         public RoomListViewModel()
         {
-            Messenger.Default.Register<NotificationMessage<List<RoomModel>>>(this, MainWindowViewModel.Token, this.UpdateRoomsList);
+            Messenger.Default.Register<NotificationMessage<List<RoomModel>>>(this, MainWindowViewModel.Token, UpdateRoomsList);
         }
 
         public ObservableCollection<RoomModel> RoomsList
         {
-            get { return this.roomsList; }
-            set { this.Set("RoomsList", ref this.roomsList, value); }
+            get { return roomsList; }
+            set { Set("RoomsList", ref roomsList, value); }
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -60,7 +60,7 @@
                 }
             }
 
-            this.RoomsList = new ObservableCollection<RoomModel>(message.Content);
+            RoomsList = new ObservableCollection<RoomModel>(message.Content);
         }
     }
 }

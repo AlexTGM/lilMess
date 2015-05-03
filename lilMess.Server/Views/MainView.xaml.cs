@@ -2,11 +2,11 @@
 {
     using System.Windows;
 
-    public partial class MainView : Window
+    public partial class MainView
     {
         public MainView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

@@ -14,20 +14,20 @@
 
         public DateTime MessageTime
         {
-            get { return this.messageTime; }
-            set { this.Set("MessageTime", ref this.messageTime, value); }
+            get { return messageTime; }
+            set { Set("MessageTime", ref messageTime, value); }
         }
 
         public string MessageContent
         {
-            get { return this.messageContent; }
-            set { this.Set("MessageContent", ref this.messageContent, value); }
+            get { return messageContent; }
+            set { Set("MessageContent", ref messageContent, value); }
         }
 
         public UserModel MessageSender
         {
-            get { return this.messageSender; }
-            set { this.Set("MessageSender", ref this.messageSender, value); }
+            get { return messageSender; }
+            set { Set("MessageSender", ref messageSender, value); }
         }
     }
 }

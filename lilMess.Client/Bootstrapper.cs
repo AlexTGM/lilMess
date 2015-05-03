@@ -18,22 +18,22 @@
     {
         public Bootstrapper()
         {
-            this.Container = new UnityContainer();
-            this.ConfigureContainer();
-            this.ConfigureBindings();
+            Container = new UnityContainer();
+            ConfigureContainer();
+            ConfigureBindings();
         }
 
         public IUnityContainer Container { get; private set; }
 
         private void ConfigureContainer()
         {
-            this.Container.RegisterType<INetwork, ClientNetwork>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IAudioProcessor, AudioProcessor>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<INetwork, ClientNetwork>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IAudioProcessor, AudioProcessor>(new ContainerControlledLifetimeManager());
 
-            this.Container.RegisterType<MainWindowViewModel>();
-            this.Container.RegisterType<LoginWindowViewModel>();
+            Container.RegisterType<MainWindowViewModel>();
+            Container.RegisterType<LoginWindowViewModel>();
 
-            this.Container.RegisterInstance(typeof(NetClient), new NetClient(new NetPeerConfiguration("lilMess")), new ContainerControlledLifetimeManager());
+            Container.RegisterInstance(typeof(NetClient), new NetClient(new NetPeerConfiguration("lilMess")), new ContainerControlledLifetimeManager());
         }
 
         private void ConfigureBindings()

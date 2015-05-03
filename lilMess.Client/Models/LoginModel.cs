@@ -17,8 +17,8 @@
         [CustomValidation(typeof(LoginModel), "ValidEndPoint")]
         public string ServerInfo
         {
-            get { return this.serverInfo; }
-            set { this.Set("ServerInfo", ref this.serverInfo, value); }
+            get { return serverInfo; }
+            set { Set("ServerInfo", ref serverInfo, value); }
         }
 
         [Required]
@@ -26,13 +26,13 @@
         [MaxLength(20)]
         public string UserName
         {
-            get { return this.userName; }
-            set { this.Set("UserName", ref this.userName, value); }
+            get { return userName; }
+            set { Set("UserName", ref userName, value); }
         }
 
         public Address Address
         {
-            get { return this.address; }
+            get { return address; }
         }
 
         public static ValidationResult ValidEndPoint(object obj, ValidationContext context)

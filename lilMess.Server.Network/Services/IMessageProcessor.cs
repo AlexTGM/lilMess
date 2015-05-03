@@ -7,9 +7,10 @@
 
     using lilMess.Misc;
     using lilMess.Misc.Model;
+    using lilMess.Misc.Packets.Body;
     using lilMess.Misc.Requests;
 
-    public delegate void SendNewPacket(byte[] data, UserModel user, List<NetConnection> except = null);
+    public delegate void SendNewPacket(byte[] data, UserModel user = null, List<NetConnection> except = null);
 
     public interface IMessageProcessor
     {
@@ -21,10 +22,12 @@
 
         KeyValuePair<PacketType, Func<Request, string>> Connection { get; }
 
-        string ConnectionApproval(NetIncomingMessage incomingMessage, string guid, string login);
+        string ConnectionApproval(NetIncomingMessage incomingMessage, AuthenticationBody body);
 
         string GetChatMessage(UserModel user, string message);
 
         string GetVoiceMessage(UserModel user, byte[] message);
+
+        string MoveUser(UserModel user, RoomModel destinationRoom);
     }
 }

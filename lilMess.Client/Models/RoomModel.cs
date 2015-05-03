@@ -17,9 +17,9 @@
 
         public RoomModel()
         {
-            this.RoomUsers = new ObservableCollection<UserModel>();
+            RoomUsers = new ObservableCollection<UserModel>();
 
-            this.Children = new ObservableCollection<IDragDropChildenModel>();
+            Children = new ObservableCollection<IDragDropChildenModel>();
         }
 
         public ObservableCollection<UserModel> RoomUsers { get; private set; }
@@ -30,20 +30,20 @@
 
         public RoomModel RoomParent
         {
-            get { return this.roomParent; }
-            set { this.Set("RoomParent", ref this.roomParent, value); }
+            get { return roomParent; }
+            set { Set("RoomParent", ref roomParent, value); }
         }
 
         public bool RoomIsHome
         {
-            get { return this.roomIsHome; }
-            set { this.Set("RoomIsHome", ref this.roomIsHome, value); }
+            get { return roomIsHome; }
+            set { Set("RoomIsHome", ref roomIsHome, value); }
         }
 
         public string RoomName
         {
-            get { return this.roomName; }
-            set { this.Set("RoomName", ref this.roomName, value); }
+            get { return roomName; }
+            set { Set("RoomName", ref roomName, value); }
         }
 
         public bool CanBeDragged

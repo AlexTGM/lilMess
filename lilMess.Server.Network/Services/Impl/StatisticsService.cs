@@ -20,25 +20,25 @@
         {
             this.server = server;
 
-            this.currentStatistics = this.previousStatistics = new StatisticsModel();
+            currentStatistics = previousStatistics = new StatisticsModel();
 
-            this.timer = new Timer(o => this.GatherStatistics(), null, 0, 1000);
+            timer = new Timer(o => GatherStatistics(), null, 0, 1000);
         }
 
         public GetStatistics Statistics { get; set; }
 
         private void GatherStatistics()
         {
-            var recivedBytes = this.server.Statistics.ReceivedBytes;
-            var sentBytes = this.server.Statistics.SentBytes;
+            var recivedBytes = server.Statistics.ReceivedBytes;
+            var sentBytes = server.Statistics.SentBytes;
 
             var temp = new StatisticsModel(recivedBytes, sentBytes);
-            this.currentStatistics = temp - this.previousStatistics;
+            currentStatistics = temp - previousStatistics;
 
-            var statistics = this.Statistics;
-            if (statistics != null) statistics(this.currentStatistics);
+            var statistics = Statistics;
+            if (statistics != null) statistics(currentStatistics);
 
-            this.previousStatistics = temp;
+            previousStatistics = temp;
         }
     }
 }

@@ -18,27 +18,27 @@
 
         public MainWindowViewModel(INetwork network)
         {
-            this.ServerInfo = network.StartupServer();
+            ServerInfo = network.StartupServer();
 
-            this.ShutdownCommand = new RelayCommand(network.ShutdownServer);
-            this.GatherStatisticsCommand = new RelayCommand(() => new StatisticsView().Show());
+            ShutdownCommand = new RelayCommand(network.ShutdownServer);
+            GatherStatisticsCommand = new RelayCommand(() => new StatisticsView().Show());
             
-            network.GotMessage += this.AddNewParagraph;
+            network.GotMessage += AddNewParagraph;
         }
 
         public string ServerInfo
         {
-            get { return this.serverInfo; }
-            set { this.Set("ServerInfo", ref this.serverInfo, value); }
+            get { return serverInfo; }
+            set { Set("ServerInfo", ref serverInfo, value); }
         }
 
         public string Document
         {
-            get { return this.document.ToString(); }
+            get { return document.ToString(); }
             set
             {
-                this.document.AppendLine(value);
-                this.RaisePropertyChanged();
+                document.AppendLine(value);
+                RaisePropertyChanged();
             }
         }
 
@@ -48,7 +48,7 @@
 
         private void AddNewParagraph(string message)
         {
-            this.Document = string.Format("{0}:\n{1}", DateTime.Now, message);
+            Document = string.Format("{0}:\n{1}", DateTime.Now, message);
         }
     }
 }

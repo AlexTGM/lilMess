@@ -17,22 +17,22 @@
 
         public IRepository<User> UserRepository
         {
-            get { return this.userRepository; }
+            get { return userRepository; }
         }
 
         public IRepository<Role> RoleRepository
         {
-            get { return this.roleRepository; }
+            get { return roleRepository; }
         }
 
         public IRepository<Room> RoomRepository
         {
-            get { return this.roomRepository; }
+            get { return roomRepository; }
         }
 
         public IRepository<Permisson> PermissonRepository
         {
-            get { return this.permissionRepository; }
+            get { return permissionRepository; }
         }
     }
 }

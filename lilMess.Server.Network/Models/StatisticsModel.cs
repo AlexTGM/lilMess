@@ -6,8 +6,8 @@
 
         public StatisticsModel(long incoming, long outcoming)
         {
-            this.IncomingTraffic = incoming;
-            this.OutcomingTraffic = outcoming;
+            IncomingTraffic = incoming;
+            OutcomingTraffic = outcoming;
         }
 
         private long IncomingTraffic { get; set; }

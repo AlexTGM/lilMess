@@ -12,41 +12,43 @@
 
     public class RoomService : IRoomService
     {
-        private readonly List<RoomModel> rooms = new List<RoomModel>();
+        private readonly List<RoomModel> _rooms = new List<RoomModel>();
 
         public RoomService(IRepositoryManager manager)
         {
             var roomList = manager.RoomRepository.Select(x => x);
 
-            this.rooms.AddRange(Mapper.Map<IEnumerable<RoomModel>>(roomList));
+            _rooms.AddRange(Mapper.Map<IEnumerable<RoomModel>>(roomList));
         }
 
-        public List<RoomModel> RoomList { get { return this.rooms; } }
+        public List<RoomModel> RoomList { get { return _rooms; } }
 
         public void AddUser(UserModel user, RoomModel room = null)
         {
-            (room ?? this.rooms.First(x => x.RoomIsHome)).RoomUsers.Add(user);
+            (room ?? _rooms.First(x => x.RoomIsHome)).RoomUsers.Add(user);
         }
 
         public UserModel FindUser(NetConnection connection)
         {
-            return this.rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault();
+            return _rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault();
         }
 
         public void RemoveUser(UserModel user)
         {
-            foreach (var room in this.rooms.Where(room => room.RoomUsers.Contains(user))) room.RoomUsers.Remove(user);
+            foreach (var room in _rooms.Where(room => room.RoomUsers.Contains(user))) room.RoomUsers.Remove(user);
         }
 
-        public void MoveUserToRoom(UserModel user, RoomModel currentRoom, RoomModel destinationRoom)
+        public void MoveUserToRoom(UserModel user, RoomModel destinationRoom)
         {
+            var currentRoom = RoomList.Single(room => room.RoomUsers.Contains(user));
+
             currentRoom.RoomUsers.Remove(user);
             destinationRoom.RoomUsers.Add(user);
         }
 
         public RoomModel GetUserCurrentRoom(UserModel user)
         {
-            return this.RoomList.SingleOrDefault(room => room.RoomUsers.Contains(user));
+            return RoomList.SingleOrDefault(room => room.RoomUsers.Contains(user));
         }
     }
 }

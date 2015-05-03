@@ -26,15 +26,15 @@
 
         public StatisticsVeiewModel(INetwork network)
         {
-            this.ChartProviders = new ObservableCollection<ChartProvider>();
-            this.Collection = new ObservableCollection<StatisticsModel>();
+            ChartProviders = new ObservableCollection<ChartProvider>();
+            Collection = new ObservableCollection<StatisticsModel>();
 
-            this.ChartProviders.Add(new IncomingTrafficProvider());
-            this.ChartProviders.Add(new OutcomingTrafficProvider());
+            ChartProviders.Add(new IncomingTrafficProvider());
+            ChartProviders.Add(new OutcomingTrafficProvider());
 
-            network.StatisticsService.Statistics += this.GetStatistics;
+            network.StatisticsService.Statistics += GetStatistics;
 
-            this.StartedOn = DateTime.Now.TimeOfDay.TotalSeconds;
+            StartedOn = DateTime.Now.TimeOfDay.TotalSeconds;
         }
 
         public ObservableCollection<StatisticsModel> Collection { get; set; }
@@ -43,84 +43,84 @@
 
         public EnumerableDataSource<StatisticsModel> ChartDataSource
         {
-            get { return this.chartDataSource; }
-            set { this.Set("ChartDataSource", ref this.chartDataSource, value); }
+            get { return chartDataSource; }
+            set { Set("ChartDataSource", ref chartDataSource, value); }
         }
 
         public ChartProvider ChartProvider
         {
-            get { return this.chartProvider ?? this.ChartProviders[0]; }
-            set { this.Set("ChartProvider", ref this.chartProvider, value); }
+            get { return chartProvider ?? ChartProviders[0]; }
+            set { Set("ChartProvider", ref chartProvider, value); }
         }
 
         public double StartedOn
         {
-            get { return Math.Round(this.started); }
+            get { return Math.Round(started); }
             set
             {
-                this.Set("StartedOn", ref this.started, value);
-                this.UpdateChartDataSource();
-                if (this.lowerLimitsBounded) this.TimeFrom = value;
+                Set("StartedOn", ref started, value);
+                UpdateChartDataSource();
+                if (lowerLimitsBounded) TimeFrom = value;
             }
         }
 
         public double UpdatedOn
         {
-            get { return Math.Round(this.updated); }
+            get { return Math.Round(updated); }
             set
             {
-                this.Set("UpdatedOn", ref this.updated, value);
-                this.UpdateChartDataSource();
-                if (this.upperLimitsBounded) this.TimeTo = value;
+                Set("UpdatedOn", ref updated, value);
+                UpdateChartDataSource();
+                if (upperLimitsBounded) TimeTo = value;
             }
         }
 
 
         public double TimeFrom
         {
-            get { return this.lowerLimitsBounded ? this.StartedOn : Math.Round(this.timeFrom); }
+            get { return lowerLimitsBounded ? StartedOn : Math.Round(timeFrom); }
             set
             {
-                this.lowerLimitsBounded = Math.Abs(Math.Round(value) - (int)this.StartedOn) < 0.0001;
-                this.Set("TimeFrom", ref this.timeFrom, value);
+                lowerLimitsBounded = Math.Abs(Math.Round(value) - (int)StartedOn) < 0.0001;
+                Set("TimeFrom", ref timeFrom, value);
             }
         }
 
         public double TimeTo
         {
-            get { return this.upperLimitsBounded ? this.UpdatedOn : Math.Round(this.timeTo); }
+            get { return upperLimitsBounded ? UpdatedOn : Math.Round(timeTo); }
             set
             {
-                this.upperLimitsBounded = Math.Abs(Math.Round(value) - this.UpdatedOn) < 0.0001;
-                this.Set("TimeTo", ref this.timeTo, value);
+                upperLimitsBounded = Math.Abs(Math.Round(value) - UpdatedOn) < 0.0001;
+                Set("TimeTo", ref timeTo, value);
             }
         }
 
         private void GetStatistics(Network.Models.StatisticsModel statisticsModel)
         {
             var stats = Mapper.Map<StatisticsModel>(statisticsModel);
-            System.Windows.Application.Current.Dispatcher.Invoke(() => this.Collection.Add(stats));
+            System.Windows.Application.Current.Dispatcher.Invoke(() => Collection.Add(stats));
 
-            this.UpdatedOn = DateTime.Now.TimeOfDay.TotalSeconds;
+            UpdatedOn = DateTime.Now.TimeOfDay.TotalSeconds;
         }
 
         private void UpdateChartDataSource()
         {
             int skip, take;
 
-            if (this.upperLimitsBounded && this.lowerLimitsBounded)
+            if (upperLimitsBounded && lowerLimitsBounded)
             {
-                skip = (int)(this.UpdatedOn - this.StartedOn - 30);
-                take = (int)(this.UpdatedOn - this.StartedOn);
+                skip = (int)(UpdatedOn - StartedOn - 30);
+                take = (int)(UpdatedOn - StartedOn);
             }
             else
             {
-                skip = (int)(this.TimeFrom - this.StartedOn);
-                take = (int)(this.TimeTo - this.TimeFrom);
+                skip = (int)(TimeFrom - StartedOn);
+                take = (int)(TimeTo - TimeFrom);
             }
 
-            var collection = this.Collection.Skip(skip > 0 ? skip : 0).Take(take);
-            this.ChartDataSource = this.ChartProvider.GeneratePlotData(collection);
+            var collection = Collection.Skip(skip > 0 ? skip : 0).Take(take);
+            ChartDataSource = ChartProvider.GeneratePlotData(collection);
         }
     }
 }

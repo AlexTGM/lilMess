@@ -31,20 +31,20 @@
 
         public MainWindowViewModel(INetwork clientNetwork, IAudioProcessor audioProcessor)
         {
-            this.network = clientNetwork;
+            network = clientNetwork;
             this.audioProcessor = audioProcessor;
 
-            this.Messages = new ObservableCollection<ChatMessageModel>();
+            Messages = new ObservableCollection<ChatMessageModel>();
 
-            this.SendChatMessageCommand = new RelayCommand(this.SendTypedMessage, this.CanSendMessage);
-            this.OpenLoginWindowCommand = new RelayCommand(ShowLoginWindow);
-            this.OpenGitRepositoryCommand = new RelayCommand(OpenGitRepository);
+            SendChatMessageCommand = new RelayCommand(SendTypedMessage, CanSendMessage);
+            OpenLoginWindowCommand = new RelayCommand(ShowLoginWindow);
+            OpenGitRepositoryCommand = new RelayCommand(OpenGitRepository);
 
-            this.network.Chat += message => this.Messages.Add(Mapper.Map<ChatMessageModel>(message));
-            this.network.Audio += message => this.audioProcessor.Translate(message);
-            this.network.Refresh += rooms => this.UpdateRooms(Mapper.Map<List<RoomModel>>(rooms));
+            network.Chat += message => Messages.Add(Mapper.Map<ChatMessageModel>(message));
+            network.Audio += message => this.audioProcessor.Translate(message);
+            network.Refresh += rooms => UpdateRooms(Mapper.Map<List<RoomModel>>(rooms));
 
-            Messenger.Default.Register<NotificationMessage>(this, LoginWindowViewModel.Token, this.UpdateConnectionInfo);
+            Messenger.Default.Register<NotificationMessage>(this, LoginWindowViewModel.Token, UpdateConnectionInfo);
         }
 
         public RelayCommand SendChatMessageCommand { get; private set; }
@@ -57,33 +57,33 @@
 
         public string ServerInfo
         {
-            get { return this.serverInfo; }
-            set { this.Set("ServerInfo", ref this.serverInfo, value); }
+            get { return serverInfo; }
+            set { Set("ServerInfo", ref serverInfo, value); }
         }
 
         public string ChatMessage
         {
-            get { return this.chatMessage; }
+            get { return chatMessage; }
             set
             {
-                this.Set("ChatMessage", ref this.chatMessage, value);
-                this.SendChatMessageCommand.RaiseCanExecuteChanged();
+                Set("ChatMessage", ref chatMessage, value);
+                SendChatMessageCommand.RaiseCanExecuteChanged();
             }
         }
 
         public void OnWindowClosing(object sender, EventArgs e)
         {
-            this.network.Shutdown();
+            network.Shutdown();
         }
 
         public void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F2) { this.audioProcessor.StartRecording(this.network.SendVoiceMessage); }
+            if (e.Key == Key.F2) { audioProcessor.StartRecording(network.SendVoiceMessage); }
         }
 
         public void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F2) { this.audioProcessor.StopRecording(); }
+            if (e.Key == Key.F2) { audioProcessor.StopRecording(); }
         }
 
         private static void OpenGitRepository()
@@ -98,30 +98,30 @@
 
         private void UpdateRooms(List<RoomModel> rooms)
         {
-            this.loggedUser = rooms.Select(y => y.RoomUsers.FirstOrDefault(z => z.Port == this.network.Port)).FirstOrDefault(y => y != null);
+            loggedUser = rooms.Select(y => y.RoomUsers.FirstOrDefault(z => z.Port == network.Port)).FirstOrDefault(y => y != null);
 
-            if (this.loggedUser != null) { this.loggedUser.Me = true; }
+            if (loggedUser != null) { loggedUser.Me = true; }
 
             Messenger.Default.Send(new NotificationMessage<List<RoomModel>>(rooms, "RoomsWasUpdated"), Token);
         }
 
         private void SendTypedMessage()
         {
-            this.network.SendChatMessage(this.ChatMessage);
-            this.ChatMessage = string.Empty;
+            network.SendChatMessage(ChatMessage);
+            ChatMessage = string.Empty;
         }
 
         private void UpdateConnectionInfo(NotificationMessage message)
         {
-            this.ServerInfo = string.Format("Connected to: {0}", message.Notification);
+            ServerInfo = string.Format("Connected to: {0}", message.Notification);
         }
 
         private bool CanSendMessage()
         {
-            if (this.loggedUser == null) return false;
+            if (loggedUser == null) return false;
 
-            var chatBoxIsNotEmpty = !string.IsNullOrWhiteSpace(this.ChatMessage);
-            var userHavePermission = this.loggedUser.HasPermittingPermissions("user_privileges");
+            var chatBoxIsNotEmpty = !string.IsNullOrWhiteSpace(ChatMessage);
+            var userHavePermission = loggedUser.HasPermittingPermissions("user_privileges");
 
             return chatBoxIsNotEmpty && userHavePermission;
         }

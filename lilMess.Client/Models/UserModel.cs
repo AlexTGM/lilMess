@@ -14,32 +14,27 @@
 
         private int port;
 
-        public UserModel()
-        {
-            
-        }
-
         public RoleModel UserRole
         {
-            get { return this.userRole; }
-            set { this.Set("UserRole", ref this.userRole, value); }
+            get { return userRole; }
+            set { Set("UserRole", ref userRole, value); }
         }
 
         public string UserName
         {
-            get { return this.userName; }
-            set { this.Set("UserName", ref this.userName, value); }
+            get { return userName; }
+            set { Set("UserName", ref userName, value); }
         }
 
         public int Port
         {
-            get { return this.port; }
-            set { this.Set("Port", ref this.port, value); }
+            get { return port; }
+            set { Set("Port", ref port, value); }
         }
 
         public bool HasPermittingPermissions(string privelegeName)
         {
-            return this.UserRole.Permissions.Where(x => x.PrivilegeName == privelegeName)
+            return UserRole.Permissions.Where(x => x.PrivilegeName == privelegeName)
                                             .Select(x => x.PermittingPrivilege)
                                             .FirstOrDefault();
         }
