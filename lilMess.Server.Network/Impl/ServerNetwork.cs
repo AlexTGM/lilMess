@@ -51,15 +51,24 @@
 
                     var request = new Request { IncomingMessage = incomingMessage, UserModel = user, Body = packet.PacketBody };
 
-                    if (message != null) { message(Service.InvokeMethod(packet, request)); }
+                    if (message != null)
+                    {
+                        message(Service.InvokeMethod(packet, request));
+                    }
                     break;
 
                 case NetIncomingMessageType.StatusChanged:
-                    if (message != null) { message(Service.StatusChanged(user, incomingMessage)); }
+                    if (message != null)
+                    {
+                        message(Service.StatusChanged(user, incomingMessage));
+                    }
                     break;
 
                 default:
-                    if (message != null) { message(incomingMessage.ReadString()); }
+                    if (message != null)
+                    {
+                        message(incomingMessage.ReadString());
+                    }
                     break;
             }
         }

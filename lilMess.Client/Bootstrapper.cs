@@ -41,7 +41,13 @@
             Mapper.CreateMap<Misc.Model.RoomModel, Models.RoomModel>();
             Mapper.CreateMap<Misc.Model.RoleModel, Models.RoleModel>();
             Mapper.CreateMap<Misc.Model.UserModel, Models.UserModel>();
+            Mapper.CreateMap<Misc.Model.RoomModel, Models.RoomModel>();
             Mapper.CreateMap<Misc.Model.PermissionModel, Models.PermissionsModel>();
+
+            Mapper.CreateMap<Models.RoomModel, Misc.Model.RoomModel>();
+            Mapper.CreateMap<Models.UserModel, Misc.Model.UserModel>();
+            Mapper.CreateMap<Models.RoleModel, Misc.Model.RoleModel>();
+            Mapper.CreateMap<Models.PermissionsModel, Misc.Model.PermissionModel>();
 
             Mapper.CreateMap<Misc.Model.ChatMessageModel, Models.ChatMessageModel>()
                 .ForMember(dest => dest.MessageTime, opt => opt.MapFrom(dest => DateTime.Now));

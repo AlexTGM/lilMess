@@ -38,8 +38,8 @@
                 request => ConnectionApproval(request.IncomingMessage, (AuthenticationBody)request.Body));
 
             Move = new KeyValuePair<PacketType, Func<Request, string>>(
-                PacketType.ServerMessage,
-                request => MoveUser(request.UserModel, (AuthenticationBody)request.Body));
+                PacketType.MoveUser,
+                request => MoveUser( ((MoveUserBody)request.Body).MoveUserModel.User.Id,  ((MoveUserBody)request.Body).MoveUserModel.Room));
         }
 
         public SendNewPacket SendNewPacket { get; set; }
@@ -69,7 +69,10 @@
         public string GetChatMessage(UserModel user, string message)
         {
             var sendNewPacket = SendNewPacket;
-            if (sendNewPacket == null) return string.Empty;
+            if (sendNewPacket == null)
+            {
+                return string.Empty;
+            }
 
             var chatMessageModel = new ChatMessageModel { MessageContent = message, MessageSender = user };
             var chatMessage = new ChatMessagePacket(new ChatMessageBody { ChatMessageModel = chatMessageModel });
@@ -82,7 +85,10 @@
         public string GetVoiceMessage(UserModel user, byte[] message)
         {
             var sendNewPacket = SendNewPacket;
-            if (sendNewPacket == null) return string.Empty;
+            if (sendNewPacket == null)
+            {
+                return string.Empty;
+            }
 
             var except = new List<NetConnection> { user.Connection };
 
@@ -92,18 +98,21 @@
             return string.Format("Пользователь {0} начал запись голосового сообщения", user.UserName);
         }
 
-        public string MoveUser(UserModel user, RoomModel destinationRoom)
+        public string MoveUser(string id, RoomModel destinationRoom)
         {
             var sendNewPacket = SendNewPacket;
-            if (sendNewPacket == null) return string.Empty;
+            if (sendNewPacket == null)
+            {
+                return string.Empty;
+            }
 
-            _roomService.MoveUserToRoom(user, destinationRoom);
+            _roomService.MoveUserToRoom(id, destinationRoom.RoomName);
 
             var serverInfo = new ServerInfoPacket(new ServerInfoBody { ServerRooms = _roomService.RoomList });
 
             sendNewPacket(Serializer<ChatMessagePacket>.SerializeObject(serverInfo));
 
-            return string.Format("Пользователь {0} теперь находится в канале {1}", user.UserName, destinationRoom.RoomName);
+            return string.Format("Пользователь {0} теперь находится в канале {1}", id, destinationRoom.RoomName);
         }
     }
 }

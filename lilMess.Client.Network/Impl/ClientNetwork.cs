@@ -68,6 +68,15 @@
             SendPacket(Serializer<VoiceMessagePacket>.SerializeObject(voiceMessage));
         }
 
+        public void MoveUser(UserModel user, RoomModel room)
+        {
+            var moveUserModel = new MoveUserModel { Room = room, User = user };
+            var moveUserBody = new MoveUserBody { MoveUserModel = moveUserModel };
+            var moveUserPacket = new MoveUserPacket(moveUserBody);
+
+            SendPacket(Serializer<MoveUserPacket>.SerializeObject(moveUserPacket));
+        }
+
         private void Callback(object peer)
         {
             NetIncomingMessage incomingMessage;

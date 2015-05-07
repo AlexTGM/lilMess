@@ -27,5 +27,7 @@
         void SendChatMessage(string message);
 
         void SendVoiceMessage(byte[] message);
+
+        void MoveUser(UserModel user, RoomModel room);
     }
 }

@@ -15,6 +15,8 @@
 
         private RoomModel roomParent;
 
+        public string Id { get; set; }
+
         public RoomModel()
         {
             RoomUsers = new ObservableCollection<UserModel>();

@@ -22,12 +22,14 @@
 
         KeyValuePair<PacketType, Func<Request, string>> Connection { get; }
 
+        KeyValuePair<PacketType, Func<Request, string>> Move { get; } 
+
         string ConnectionApproval(NetIncomingMessage incomingMessage, AuthenticationBody body);
 
         string GetChatMessage(UserModel user, string message);
 
         string GetVoiceMessage(UserModel user, byte[] message);
 
-        string MoveUser(UserModel user, RoomModel destinationRoom);
+        string MoveUser(string username, RoomModel destinationRoom);
     }
 }

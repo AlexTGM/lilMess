@@ -12,12 +12,13 @@
 
         void AddUser(UserModel user, RoomModel room = null);
 
+        UserModel FindUser(string id);
         UserModel FindUser(NetConnection connection);
 
-        void RemoveUser(UserModel user);
+        void RemoveUser(string id);
 
-        void MoveUserToRoom(UserModel user, RoomModel destinationRoom);
+        void MoveUserToRoom(string id, string roomName);
 
-        RoomModel GetUserCurrentRoom(UserModel uiserModel);
+        RoomModel GetUserCurrentRoom(string id);
     }
 }

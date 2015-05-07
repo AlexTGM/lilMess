@@ -9,6 +9,7 @@
         ChatMessage = 1,
         VoiceMessage = 2,
         LogIn = 3,
+        MoveUser = 4,
         ServerMessage = 5
     }
 

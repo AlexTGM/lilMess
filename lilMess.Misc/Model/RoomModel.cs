@@ -11,6 +11,8 @@
             RoomUsers = new ObservableCollection<UserModel>();
         }
 
+        public string Id { get; set; }
+
         public string RoomName { get; set; }
 
         public bool RoomIsHome { get; set; }

@@ -14,6 +14,8 @@
 
         private int port;
 
+        public string Id { get; set; }
+
         public RoleModel UserRole
         {
             get { return userRole; }

@@ -10,6 +10,8 @@
 
         private string roleColor;
 
+        public string Id { get; set; }
+
         public RoleModel()
         {
             Permissions = new ObservableCollection<PermissionsModel>();

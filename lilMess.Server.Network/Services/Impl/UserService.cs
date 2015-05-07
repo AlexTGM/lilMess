@@ -6,16 +6,16 @@
 
     public class UserService : IUserService
     {
-        private readonly IRepositoryManager manager;
+        private readonly IRepositoryManager _manager;
 
         public UserService(IRepositoryManager manager)
         {
-            this.manager = manager;
+            _manager = manager;
         }
 
         public User GetOrUpdate(string guid, string login)
         {
-            return manager.UserRepository.GetOrUpdate(guid, login);
+            return _manager.UserRepository.GetOrUpdate(guid, login);
         }
     }
 }

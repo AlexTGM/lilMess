@@ -1,5 +1,6 @@
 ﻿namespace lilMess.Server.Network.Services.Impl
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -33,22 +34,41 @@
             return _rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault();
         }
 
-        public void RemoveUser(UserModel user)
+        public UserModel FindUser(string id)
         {
-            foreach (var room in _rooms.Where(room => room.RoomUsers.Contains(user))) room.RoomUsers.Remove(user);
+            return _rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Id == id)).FirstOrDefault(user => user != null);
         }
 
-        public void MoveUserToRoom(UserModel user, RoomModel destinationRoom)
+        public void RemoveUser(string id)
         {
-            var currentRoom = RoomList.Single(room => room.RoomUsers.Contains(user));
-
-            currentRoom.RoomUsers.Remove(user);
-            destinationRoom.RoomUsers.Add(user);
+            foreach (var room in _rooms.Where(room => room.RoomUsers.Any(user => user.Id == id)))
+            {
+                var userToDelete = room.RoomUsers.SingleOrDefault(user => user.Id == id);
+        
+                if (userToDelete != null) room.RoomUsers.Remove(userToDelete);
+            }
         }
 
-        public RoomModel GetUserCurrentRoom(UserModel user)
+        public void MoveUserToRoom(string id, string roomName)
         {
-            return RoomList.SingleOrDefault(room => room.RoomUsers.Contains(user));
+            var userToDelete = FindUser(id);
+
+            if (userToDelete == null) throw new ArgumentException(userToDelete.ToString());
+
+            var currentRoom = RoomList.Single(room => room.RoomUsers.Any(user => user.Id == id));
+            currentRoom.RoomUsers.Remove(userToDelete);
+            RoomList.Single(room => Equals(room.RoomName, roomName)).RoomUsers.Add(userToDelete);
+
+            //var currentRoom = RoomList.Single(room => room.RoomUsers.Contains(user => user.));
+
+            //currentRoom.RoomUsers.Remove(user);
+
+            //_rooms.Single(room => Equals(room.RoomName, destinationRoom.RoomName)).RoomUsers.Add(user);
+        }
+
+        public RoomModel GetUserCurrentRoom(string id)
+        {
+            return RoomList.SingleOrDefault(room => room.RoomUsers.Any(user => user.Id == id));
         }
     }
 }

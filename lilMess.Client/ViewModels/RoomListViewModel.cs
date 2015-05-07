@@ -5,27 +5,36 @@
     using System.Collections.ObjectModel;
     using System.Windows;
 
+    using AutoMapper;
+
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Messaging;
 
     using GongSolutions.Wpf.DragDrop;
 
     using lilMess.Client.DragDrop;
-    using lilMess.Client.Models;
+    using lilMess.Client.Network;
+    using lilMess.Misc.Model;
+
+    using RoomModel = lilMess.Client.Models.RoomModel;
 
     public class RoomListViewModel : ViewModelBase, IDropTarget
     {
-        private ObservableCollection<RoomModel> roomsList = new ObservableCollection<RoomModel>();
+        private readonly INetwork _network;
 
-        public RoomListViewModel()
+        private ObservableCollection<RoomModel> _roomsList = new ObservableCollection<RoomModel>();
+
+        public RoomListViewModel(INetwork network)
         {
+            _network = network;
+
             Messenger.Default.Register<NotificationMessage<List<RoomModel>>>(this, MainWindowViewModel.Token, UpdateRoomsList);
         }
 
         public ObservableCollection<RoomModel> RoomsList
         {
-            get { return roomsList; }
-            set { Set("RoomsList", ref roomsList, value); }
+            get { return _roomsList; }
+            set { Set("RoomsList", ref _roomsList, value); }
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -48,6 +57,11 @@
 
             targetItem.Children.Add(sourceItem);
             ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
+            
+            Misc.Model.RoomModel room = Mapper.Map<Misc.Model.RoomModel>(targetItem);
+            Misc.Model.UserModel user = Mapper.Map<Misc.Model.UserModel>(sourceItem);
+
+            _network.MoveUser(user, room);
         }
 
         private void UpdateRoomsList(NotificationMessage<List<RoomModel>> message)

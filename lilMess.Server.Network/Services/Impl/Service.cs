@@ -30,11 +30,16 @@
                            {
                                { messageProcessor.Chat.Key, messageProcessor.Chat.Value },
                                { messageProcessor.Audio.Key, messageProcessor.Audio.Value },
-                               { messageProcessor.Connection.Key, messageProcessor.Connection.Value }
+                               {
+                                   messageProcessor.Connection.Key,
+                                   messageProcessor.Connection.Value
+                               },
+                               { messageProcessor.Move.Key, messageProcessor.Move.Value }
                            };
 
             messageProcessor.SendNewPacket += SendPacket;
         }
+
         public void StartupServer(ProcessNewMessage processNewMessageDelegate)
         {
             _server.Start();
@@ -43,7 +48,10 @@
             {
                 var message = _server.ReadMessage();
 
-                if (message != null) processNewMessageDelegate.Invoke(message, _roomService.FindUser(message.SenderConnection));
+                if (message != null)
+                {
+                    processNewMessageDelegate.Invoke(message, _roomService.FindUser(message.SenderConnection));
+                }
 
                 Thread.Sleep(100);
             }
@@ -62,7 +70,10 @@
         public string StatusChanged(UserModel user, NetIncomingMessage incomingMessage)
         {
             var status = (NetConnectionStatus)incomingMessage.ReadByte();
-            if (status == NetConnectionStatus.Disconnected && user != null) { _roomService.RemoveUser(user); }
+            if (status == NetConnectionStatus.Disconnected && user != null)
+            {
+                _roomService.RemoveUser(user.Id);
+            }
 
             var serverInfo = new ServerInfoPacket(new ServerInfoBody { ServerRooms = _roomService.RoomList });
 
@@ -73,19 +84,29 @@
 
         private void SendPacket(byte[] data, UserModel sender = null, List<NetConnection> except = null)
         {
-            var userCurrentRoom = _roomService.GetUserCurrentRoom(sender);
-
-            var connectionsList = userCurrentRoom == null 
-                ? _server.Connections.ToList()
-                : userCurrentRoom.RoomUsers.Select(x => x.Connection);
-
-            var recipients = connectionsList.Except(except ?? new List<NetConnection>()).ToList();
-
-            if (!recipients.Any()) { return; }
+            if (!_server.Connections.Any()) return;
 
             var outgoingMessage = _server.CreateMessage();
 
             outgoingMessage.Write(data);
+
+            if (sender == null)
+            {
+                _server.SendMessage(outgoingMessage, _server.Connections.ToList(), NetDeliveryMethod.ReliableOrdered, 0);
+                return;
+            }
+
+            var userCurrentRoom = _roomService.GetUserCurrentRoom(sender.Id);
+
+            var connectionsList = userCurrentRoom == null
+                                      ? _server.Connections.ToList()
+                                      : userCurrentRoom.RoomUsers.Select(x => x.Connection);
+
+            var recipients = connectionsList.Except(except ?? new List<NetConnection>()).ToList();
+            if (!recipients.Any())
+            {
+                return;
+            }
 
             _server.SendMessage(outgoingMessage, recipients, NetDeliveryMethod.ReliableOrdered, 0);
         }

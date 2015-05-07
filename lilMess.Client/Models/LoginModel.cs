@@ -12,7 +12,7 @@
         private string userName = "User";
 
         private Address address = new Address { Ip = "127.0.0.1", Port = 9997 };
-
+        
         [Required]
         [CustomValidation(typeof(LoginModel), "ValidEndPoint")]
         public string ServerInfo

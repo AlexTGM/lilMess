@@ -8,37 +8,40 @@
 
     public class StatisticsService : IStatisticsService
     {
-        private readonly NetServer server;
+        private readonly NetServer _server;
 
-        private StatisticsModel previousStatistics;
+        private StatisticsModel _previousStatistics;
 
-        private StatisticsModel currentStatistics;
+        private StatisticsModel _currentStatistics;
 
-        private Timer timer;
+        private Timer _timer;
 
         public StatisticsService(NetServer server)
         {
-            this.server = server;
+            _server = server;
 
-            currentStatistics = previousStatistics = new StatisticsModel();
+            _currentStatistics = _previousStatistics = new StatisticsModel();
 
-            timer = new Timer(o => GatherStatistics(), null, 0, 1000);
+            _timer = new Timer(o => GatherStatistics(), null, 0, 1000);
         }
 
         public GetStatistics Statistics { get; set; }
 
         private void GatherStatistics()
         {
-            var recivedBytes = server.Statistics.ReceivedBytes;
-            var sentBytes = server.Statistics.SentBytes;
+            var recivedBytes = _server.Statistics.ReceivedBytes;
+            var sentBytes = _server.Statistics.SentBytes;
 
             var temp = new StatisticsModel(recivedBytes, sentBytes);
-            currentStatistics = temp - previousStatistics;
+            _currentStatistics = temp - _previousStatistics;
 
             var statistics = Statistics;
-            if (statistics != null) statistics(currentStatistics);
+            if (statistics != null)
+            {
+                statistics(_currentStatistics);
+            }
 
-            previousStatistics = temp;
+            _previousStatistics = temp;
         }
     }
 }
