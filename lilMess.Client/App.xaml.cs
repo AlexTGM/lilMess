@@ -8,11 +8,30 @@
     using System.Windows;
     using System.Windows.Threading;
 
+    using lilMess.Tools;
+
     public partial class App
     {
         private const string ResFolder = "Resources/Translations";
 
         public static event EventHandler LanguageChanged;
+
+        KeyboardListener KListener = new KeyboardListener();
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            KListener.KeyDown += new RawKeyEventHandler(KListener_KeyDown);
+        }
+
+        void KListener_KeyDown(object sender, RawKeyEventArgs args)
+        {
+            Console.WriteLine(args.Key.ToString());
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            KListener.Dispose();
+        }
 
         public App()
         {

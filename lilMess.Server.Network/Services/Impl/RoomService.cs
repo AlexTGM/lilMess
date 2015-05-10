@@ -22,7 +22,13 @@
             _rooms.AddRange(Mapper.Map<IEnumerable<RoomModel>>(roomList));
         }
 
-        public List<RoomModel> RoomList { get { return _rooms; } }
+        public List<RoomModel> RoomList
+        {
+            get
+            {
+                return _rooms;
+            }
+        }
 
         public void AddUser(UserModel user, RoomModel room = null)
         {
@@ -31,7 +37,7 @@
 
         public UserModel FindUser(NetConnection connection)
         {
-            return _rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault();
+            return _rooms.Select(room => room.RoomUsers.FirstOrDefault(x => x.Connection == connection)).FirstOrDefault(user => user != null);
         }
 
         public UserModel FindUser(string id)
@@ -44,26 +50,19 @@
             foreach (var room in _rooms.Where(room => room.RoomUsers.Any(user => user.Id == id)))
             {
                 var userToDelete = room.RoomUsers.SingleOrDefault(user => user.Id == id);
-        
-                if (userToDelete != null) room.RoomUsers.Remove(userToDelete);
+
+                if (userToDelete != null)
+                {
+                    room.RoomUsers.Remove(userToDelete);
+                }
             }
         }
 
         public void MoveUserToRoom(string id, string roomName)
         {
             var userToDelete = FindUser(id);
-
-            if (userToDelete == null) throw new ArgumentException(userToDelete.ToString());
-
-            var currentRoom = RoomList.Single(room => room.RoomUsers.Any(user => user.Id == id));
-            currentRoom.RoomUsers.Remove(userToDelete);
+            RoomList.Single(room => room.RoomUsers.Any(user => user.Id == id)).RoomUsers.Remove(userToDelete);
             RoomList.Single(room => Equals(room.RoomName, roomName)).RoomUsers.Add(userToDelete);
-
-            //var currentRoom = RoomList.Single(room => room.RoomUsers.Contains(user => user.));
-
-            //currentRoom.RoomUsers.Remove(user);
-
-            //_rooms.Single(room => Equals(room.RoomName, destinationRoom.RoomName)).RoomUsers.Add(user);
         }
 
         public RoomModel GetUserCurrentRoom(string id)

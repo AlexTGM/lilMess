@@ -5,7 +5,6 @@
     using lilMess.Client.ViewModels;
 
     using MahApps.Metro;
-    using MahApps.Metro.Controls;
 
     public partial class MainWindow
     {
@@ -18,9 +17,6 @@
             ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
 
             var viewModel = (MainWindowViewModel)DataContext;
-
-            KeyDown += viewModel.OnKeyDown;
-            KeyUp += viewModel.OnKeyUp;
             Closed += viewModel.OnWindowClosing;
         }
     }

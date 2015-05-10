@@ -16,23 +16,27 @@
     using lilMess.Client.Models;
     using lilMess.Client.Network;
     using lilMess.Client.Views;
+    using lilMess.Tools;
 
     public class MainWindowViewModel : ViewModelBase
     {
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly KeyboardListener _globalKeyboardHook;
+
         public static readonly Guid Token = Guid.NewGuid();
 
-        private readonly INetwork network;
+        private readonly INetwork _network;
 
-        private readonly IAudioProcessor audioProcessor;
+        private readonly IAudioProcessor _audioProcessor;
 
-        private string serverInfo = "Disconnected", chatMessage = string.Empty;
+        private string _serverInfo = "Disconnected", _chatMessage = string.Empty;
 
-        private UserModel loggedUser;
+        private UserModel _loggedUser;
 
         public MainWindowViewModel(INetwork clientNetwork, IAudioProcessor audioProcessor)
         {
-            network = clientNetwork;
-            this.audioProcessor = audioProcessor;
+            _network = clientNetwork;
+            _audioProcessor = audioProcessor;
 
             Messages = new ObservableCollection<ChatMessageModel>();
 
@@ -40,9 +44,13 @@
             OpenLoginWindowCommand = new RelayCommand(ShowLoginWindow);
             OpenGitRepositoryCommand = new RelayCommand(OpenGitRepository);
 
-            network.Chat += message => Messages.Add(Mapper.Map<ChatMessageModel>(message));
-            network.Audio += message => this.audioProcessor.Translate(message);
-            network.Refresh += rooms => UpdateRooms(Mapper.Map<List<RoomModel>>(rooms));
+            _network.Chat += message => Messages.Add(Mapper.Map<ChatMessageModel>(message));
+            _network.Audio += message => _audioProcessor.Translate(message);
+            _network.Refresh += rooms => UpdateRooms(Mapper.Map<List<RoomModel>>(rooms));
+
+            _globalKeyboardHook = new KeyboardListener();
+            _globalKeyboardHook.KeyDown += OnGlobalHookKeyDown;
+            _globalKeyboardHook.KeyUp += OnGlobalHookKeyUp;
 
             Messenger.Default.Register<NotificationMessage>(this, LoginWindowViewModel.Token, UpdateConnectionInfo);
         }
@@ -57,33 +65,32 @@
 
         public string ServerInfo
         {
-            get { return serverInfo; }
-            set { Set("ServerInfo", ref serverInfo, value); }
+            get
+            {
+                return _serverInfo;
+            }
+            set
+            {
+                Set("ServerInfo", ref _serverInfo, value);
+            }
         }
 
         public string ChatMessage
         {
-            get { return chatMessage; }
+            get
+            {
+                return _chatMessage;
+            }
             set
             {
-                Set("ChatMessage", ref chatMessage, value);
+                Set("ChatMessage", ref _chatMessage, value);
                 SendChatMessageCommand.RaiseCanExecuteChanged();
             }
         }
 
         public void OnWindowClosing(object sender, EventArgs e)
         {
-            network.Shutdown();
-        }
-
-        public void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.F2) { audioProcessor.StartRecording(network.SendVoiceMessage); }
-        }
-
-        public void OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.F2) { audioProcessor.StopRecording(); }
+            _network.Shutdown();
         }
 
         private static void OpenGitRepository()
@@ -96,18 +103,37 @@
             new LoginWindow().ShowDialog();
         }
 
+        private void OnGlobalHookKeyUp(object sender, RawKeyEventArgs e)
+        {
+            if (e.Key == Key.F2)
+            {
+                _audioProcessor.StopRecording();
+            }
+        }
+
+        private void OnGlobalHookKeyDown(object sender, RawKeyEventArgs e)
+        {
+            if (e.Key == Key.F2)
+            {
+                _audioProcessor.StartRecording(_network.SendVoiceMessage);
+            }
+        }
+
         private void UpdateRooms(List<RoomModel> rooms)
         {
-            loggedUser = rooms.Select(y => y.RoomUsers.FirstOrDefault(z => z.Port == network.Port)).FirstOrDefault(y => y != null);
+            _loggedUser = rooms.Select(y => y.RoomUsers.FirstOrDefault(z => z.Port == _network.Port)).FirstOrDefault(y => y != null);
 
-            if (loggedUser != null) { loggedUser.Me = true; }
+            if (_loggedUser != null)
+            {
+                _loggedUser.Me = true;
+            }
 
             Messenger.Default.Send(new NotificationMessage<List<RoomModel>>(rooms, "RoomsWasUpdated"), Token);
         }
 
         private void SendTypedMessage()
         {
-            network.SendChatMessage(ChatMessage);
+            _network.SendChatMessage(ChatMessage);
             ChatMessage = string.Empty;
         }
 
@@ -118,10 +144,13 @@
 
         private bool CanSendMessage()
         {
-            if (loggedUser == null) return false;
+            if (_loggedUser == null)
+            {
+                return false;
+            }
 
             var chatBoxIsNotEmpty = !string.IsNullOrWhiteSpace(ChatMessage);
-            var userHavePermission = loggedUser.HasPermittingPermissions("user_privileges");
+            var userHavePermission = _loggedUser.HasPermittingPermissions("user_privileges");
 
             return chatBoxIsNotEmpty && userHavePermission;
         }

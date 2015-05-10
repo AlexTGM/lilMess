@@ -14,7 +14,6 @@
 
     using lilMess.Client.DragDrop;
     using lilMess.Client.Network;
-    using lilMess.Misc.Model;
 
     using RoomModel = lilMess.Client.Models.RoomModel;
 
@@ -57,10 +56,10 @@
 
             targetItem.Children.Add(sourceItem);
             ((IList)dropInfo.DragInfo.SourceCollection).Remove(sourceItem);
-            
+
             Misc.Model.RoomModel room = Mapper.Map<Misc.Model.RoomModel>(targetItem);
             Misc.Model.UserModel user = Mapper.Map<Misc.Model.UserModel>(sourceItem);
-
+            
             _network.MoveUser(user, room);
         }
 
