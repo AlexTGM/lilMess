@@ -50,7 +50,7 @@
 
         public bool CanBeDragged
         {
-            get { return true; }
+            get { return false; }
             set { throw new NotImplementedException(); }
         }
     }

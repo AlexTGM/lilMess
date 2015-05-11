@@ -41,7 +41,7 @@
             var sourceItem = dropInfo.Data as IDragDropChildenModel;
             var targetItem = dropInfo.TargetItem as IDragDropParentModel;
 
-            if (sourceItem == null || targetItem == null || !targetItem.CanAcceptChildren) return;
+            if (sourceItem == null || !sourceItem.CanBeDragged || targetItem == null || !targetItem.CanAcceptChildren) return;
 
             dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
             dropInfo.Effects = DragDropEffects.Move;
