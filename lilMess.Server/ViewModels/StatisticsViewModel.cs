@@ -74,8 +74,7 @@
                 if (upperLimitsBounded) TimeTo = value;
             }
         }
-
-
+        
         public double TimeFrom
         {
             get { return lowerLimitsBounded ? StartedOn : Math.Round(timeFrom); }

@@ -9,10 +9,10 @@
             IncomingTraffic = incoming;
             OutcomingTraffic = outcoming;
         }
+        
+        public long IncomingTraffic { get; set; }
 
-        private long IncomingTraffic { get; set; }
-
-        private long OutcomingTraffic { get; set; }
+        public long OutcomingTraffic { get; set; }
 
         public static StatisticsModel operator -(StatisticsModel obj1, StatisticsModel obj2)
         {
