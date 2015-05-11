@@ -1,6 +1,7 @@
 ﻿namespace lilMess.Client.ViewModels
 {
     using System;
+    using System.Globalization;
 
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
@@ -10,15 +11,15 @@
     using lilMess.Client.Network;
     using lilMess.Client.Views;
 
-    public class LoginWindowViewModel : ViewModelBase
+    public class LoginViewModel : ViewModelBase
     {
         public static readonly Guid Token = Guid.NewGuid();
 
-        private readonly INetwork network;
+        private readonly INetwork _network;
 
-        public LoginWindowViewModel(INetwork network)
+        public LoginViewModel(INetwork network)
         {
-            this.network = network;
+            _network = network;
 
             LoginModel = new LoginModel();
             LoginModel.ErrorsChanged += (sender, args) => LoginCommand.RaiseCanExecuteChanged();
@@ -32,11 +33,11 @@
 
         private void TryLogin(object param)
         {
-            network.Connect(LoginModel.Address.Ip, LoginModel.Address.Port, LoginModel.UserName);
+            _network.Connect(LoginModel.Address.Ip, LoginModel.Address.Port, LoginModel.UserName);
 
             Messenger.Default.Send(new NotificationMessage(LoginModel.ServerInfo), Token);
 
-            ((LoginWindow)param).Hide();
+            ((LoginView)param).Hide();
         }
     }
 }

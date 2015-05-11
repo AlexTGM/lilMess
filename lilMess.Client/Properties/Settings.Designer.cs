@@ -25,13 +25,37 @@ namespace lilMess.Client.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ru-RU")]
         public global::System.Globalization.CultureInfo DefaultLanguage {
             get {
                 return ((global::System.Globalization.CultureInfo)(this["DefaultLanguage"]));
             }
             set {
                 this["DefaultLanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
+        public string DefaultAppTheme {
+            get {
+                return ((string)(this["DefaultAppTheme"]));
+            }
+            set {
+                this["DefaultAppTheme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Green")]
+        public string DefaultAppAccent {
+            get {
+                return ((string)(this["DefaultAppAccent"]));
+            }
+            set {
+                this["DefaultAppAccent"] = value;
             }
         }
     }

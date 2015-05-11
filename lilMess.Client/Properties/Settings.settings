@@ -3,7 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="DefaultLanguage" Type="System.Globalization.CultureInfo" Scope="User">
-      <Value Profile="(Default)">en-US</Value>
+      <Value Profile="(Default)">ru-RU</Value>
+    </Setting>
+    <Setting Name="DefaultAppTheme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BaseLight</Value>
+    </Setting>
+    <Setting Name="DefaultAppAccent" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Green</Value>
     </Setting>
   </Settings>
 </SettingsFile>

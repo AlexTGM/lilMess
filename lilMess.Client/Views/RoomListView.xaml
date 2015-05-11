@@ -17,7 +17,14 @@
                   dragDrop:DragDrop.IsDragSource="True"
                   dragDrop:DragDrop.IsDropTarget="True"
                   dragDrop:DragDrop.DragHandler="{Binding}"
-                  dragDrop:DragDrop.DropHandler="{Binding}">
+                  dragDrop:DragDrop.DropHandler="{Binding}"
+                  Background="Transparent">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="IsExpanded" Value="True"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
             <TreeView.Resources>
                 <BooleanToVisibilityConverter x:Key="BoolToVis" />
                 <HierarchicalDataTemplate DataType="{x:Type model:RoomModel}" ItemsSource="{Binding Children}">

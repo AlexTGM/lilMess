@@ -11,22 +11,30 @@
 
         static ViewModelLocator()
         {
-            if (Bootstrapper == null) Bootstrapper = new Bootstrapper();
+            if (Bootstrapper == null)
+            {
+                Bootstrapper = new Bootstrapper();
+            }
         }
 
-        public MainWindowViewModel Main
+        public MainViewModel Main
         {
-            get { return Bootstrapper.Container.Resolve<MainWindowViewModel>(); }
+            get { return Bootstrapper.Container.Resolve<MainViewModel>(); }
         }
 
-        public LoginWindowViewModel Login
+        public LoginViewModel Login
         {
-            get { return Bootstrapper.Container.Resolve<LoginWindowViewModel>(); }
+            get { return Bootstrapper.Container.Resolve<LoginViewModel>(); }
         }
 
         public RoomListViewModel RoomList
         {
             get { return Bootstrapper.Container.Resolve<RoomListViewModel>(); }
+        }
+
+        public SettingsViewModel Settings
+        {
+            get { return Bootstrapper.Container.Resolve<SettingsViewModel>(); }
         }
 
         #region design time

@@ -4,8 +4,8 @@
 	xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:views="clr-namespace:lilMess.Client.Views"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-	x:Class="lilMess.Client.Views.MainWindow"
-	Title="lilMess" Height="400" Width="800" FontFamily="SegoeUI"
+	x:Class="lilMess.Client.Views.MainView"
+	Title="{DynamicResource MainWindowTitle}" Height="400" Width="800" FontFamily="SegoeUI"
 	
 	ResizeMode="CanResizeWithGrip"
 	GlowBrush="{DynamicResource AccentColorBrush}"
@@ -15,11 +15,10 @@
 
 	<controls:MetroWindow.LeftWindowCommands>
 		<controls:WindowCommands>
-			<Button Command="{Binding OpenGitRepositoryCommand}" ToolTip="lilMess on GitHub">
+			<Button Command="{Binding OpenGitRepositoryCommand}" ToolTip="{DynamicResource GitHubTooltip}">
 				<Rectangle Width="22" Height="22" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
 					<Rectangle.OpacityMask>
-						<VisualBrush Stretch="Uniform"
-									 Visual="{StaticResource appbar_github}" />
+						<VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_github}" />
 					</Rectangle.OpacityMask>
 				</Rectangle>
 			</Button>
@@ -28,7 +27,8 @@
 
 	<controls:MetroWindow.RightWindowCommands>
 		<controls:WindowCommands>
-			<Button Content="Connect" Command="{Binding OpenLoginWindowCommand}"/>
+			<Button Content="{DynamicResource LoginWindowOpen}" Command="{Binding OpenLoginWindowCommand}"/>
+            <Button Content="{DynamicResource SettingsWindowOpen}" Command="{Binding OpenSettingsWindowCommand}"/>
 		</controls:WindowCommands>
 	</controls:MetroWindow.RightWindowCommands>
 	
@@ -56,8 +56,8 @@
 								<ColumnDefinition Width="auto" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
-							<Border Style="{StaticResource ChatMessageBorderStyle}" Grid.Column="0" >
-								<TextBlock Style="{StaticResource TextBlockSender}" Text="{Binding MessageTime, StringFormat=\{0:HH:mm:ss\}}" VerticalAlignment="Top"/>
+                            <Border Style="{DynamicResource ChatMessageBorderStyle}" Grid.Column="0" >
+								<TextBlock Style="{DynamicResource TextBlockSender}" Text="{Binding MessageTime, StringFormat=\{0:HH:mm:ss\}}" VerticalAlignment="Top"/>
 							</Border>
 							<Border x:Name="contentBorder" Grid.Column="1" Style="{StaticResource ChatMessageBorderStyle}">
 								<StackPanel>
