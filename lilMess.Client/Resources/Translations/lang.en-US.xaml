@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+
+    <v:String x:Key="Cancel">Cancel</v:String>
+    <v:String x:Key="Save">Save</v:String>
+
+    <v:String x:Key="MainWindowTitle">lilMess</v:String>
+    <v:String x:Key="SettingsWindowTitle">lilMess | Settings</v:String>
+    <v:String x:Key="LoginWindowTitle">lilMess | Login</v:String>
+
+    <v:String x:Key="LoginWindowOpen">Connect</v:String>
+    <v:String x:Key="SettingsWindowOpen">Settings</v:String>
+    <v:String x:Key="GitHubTooltip">lilMess on GitHub</v:String>
+
+    <v:String x:Key="Server">Server</v:String>
+    <v:String x:Key="Login">Login</v:String>
+    <v:String x:Key="LoginAction">Proceed</v:String>
+
+    <v:String x:Key="Localization">Language</v:String>
+    <v:String x:Key="Theme">Theme</v:String>
+    <v:String x:Key="Accent">Acent</v:String>
+
+</ResourceDictionary>

@@ -1,0 +1,65 @@
+﻿<Window x:Class="lilMess.Server.Views.StatisticsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="StatisticsView" Height="400" Width="400"
+        DataContext="{Binding Statistics, Source={StaticResource Locator}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="70*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <TextBlock Text="Choose Statistics Source:" />
+            <ComboBox ItemsSource="{Binding ChartProviders}" SelectedItem="{Binding ChartProvider}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ChartCaption}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Text="test" />
+            <xctk:RangeSlider Maximum="{Binding UpdatedOn}" Minimum="{Binding StartedOn}" LowerValue="{Binding TimeFrom}" HigherValue="{Binding TimeTo}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="20*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding TimeFrom}" Grid.Column="0"/>
+                <TextBlock Text=" / " Grid.Column="1"/>
+                <TextBlock Text="{Binding StartedOn}" Grid.Column="2"/>
+                <TextBlock Text="   " Grid.Column="3"/>
+                <TextBlock Text="{Binding TimeTo}" Grid.Column="4"/>
+                <TextBlock Text=" / " Grid.Column="5"/>
+                <TextBlock Text="{Binding UpdatedOn}" Grid.Column="6"/>
+            </Grid>
+                
+        </StackPanel>
+        <DataGrid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Collection}" 
+                  IsReadOnly="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Time, StringFormat=\{0:HH:mm:ss\}}" Header="Время" Width="*"/>
+                <DataGridTextColumn Binding="{Binding IncomingTraffic}" Header="Входящий трафик" Width="*"/>
+                <DataGridTextColumn Binding="{Binding OutcomingTraffic}" Header="Исходящий трафик" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CpuLoad}" Header="Загрузка CPU" Width="*"/>
+                <DataGridTextColumn Binding="{Binding MemLoad}" Header="Загрузка RAM" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <d3:ChartPlotter Grid.Row="0" Grid.Column="1">
+            <d3:Header Content="{Binding ChartProvider.ChartHeader}"/>
+            <d3:HorizontalAxisTitle Content="{Binding ChartProvider.HorizontalAxisTitle}"/>
+            <d3:VerticalAxisTitle Content="{Binding ChartProvider.VerticalAxisTitle}" />
+            <d3:LineGraph DataSource="{Binding ChartDataSource}" />
+        </d3:ChartPlotter>
+    </Grid>
+</Window>

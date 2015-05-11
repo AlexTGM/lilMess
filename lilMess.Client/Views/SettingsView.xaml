@@ -1,0 +1,41 @@
+﻿<controls:MetroWindow x:Name="Window"
+    x:Class="lilMess.Client.Views.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    Title="{DynamicResource SettingsWindowTitle}" Height="300" Width="430" FontFamily="SegoeUI"
+    ResizeMode="NoResize"
+    GlowBrush="{DynamicResource AccentColorBrush}"
+    WindowStartupLocation="CenterScreen"
+    DataContext="{Binding Settings, Source={StaticResource Locator}}">
+  
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" FontSize="16" Grid.Row="1" Grid.Column="1" Margin="7,3,7,3" VerticalAlignment="Center" Text="{DynamicResource Localization}" />
+        <TextBlock TextAlignment="Center" FontSize="16" Grid.Row="2" Grid.Column="1" Margin="7,3,7,3" VerticalAlignment="Center" Text="{DynamicResource Theme}" />
+        <TextBlock TextAlignment="Center" FontSize="16" Grid.Row="3" Grid.Column="1" Margin="7,3,7,3" VerticalAlignment="Center" Text="{DynamicResource Accent}" />
+
+        <ComboBox Grid.Row="1" Grid.Column="2"  Margin="5" DisplayMemberPath="Name" ItemsSource="{Binding ApplicationCommon.TranslationService.AvaiableCultures}" SelectedValue="{Binding Language}" />
+        <ComboBox Grid.Row="2" Grid.Column="2"  Margin="5" DisplayMemberPath="Name" ItemsSource="{Binding ApplicationCommon.ThemeService.AvaiableAppThemes}" SelectedValue="{Binding Theme}" />
+        <ComboBox Grid.Row="3" Grid.Column="2"  Margin="5" DisplayMemberPath="Name" ItemsSource="{Binding ApplicationCommon.ThemeService.AvaiableAccentsList}" SelectedValue="{Binding Accent}" />
+
+        <Button Grid.Row="5" Grid.Column="1" Margin="5" Content="{DynamicResource Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=Window}" />
+        <Button Grid.Row="5" Grid.Column="2" Margin="5" Content="{DynamicResource Save}" Command="{Binding SaveSettingsCommand}" CommandParameter="{Binding ElementName=Window}" />
+    </Grid>
+
+</controls:MetroWindow>
