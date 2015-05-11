@@ -8,30 +8,30 @@
 
     public class UserModel : ObservableObject, IDragDropChildenModel
     {
-        private string userName;
+        private string _userName;
 
-        private RoleModel userRole;
+        private RoleModel _userRole;
 
-        private int port;
+        private int _port;
 
         public string Id { get; set; }
 
         public RoleModel UserRole
         {
-            get { return userRole; }
-            set { Set("UserRole", ref userRole, value); }
+            get { return _userRole; }
+            set { Set("UserRole", ref _userRole, value); }
         }
 
         public string UserName
         {
-            get { return userName; }
-            set { Set("UserName", ref userName, value); }
+            get { return _userName; }
+            set { Set("UserName", ref _userName, value); }
         }
 
         public int Port
         {
-            get { return port; }
-            set { Set("Port", ref port, value); }
+            get { return _port; }
+            set { Set("Port", ref _port, value); }
         }
 
         public bool HasPermittingPermissions(string privelegeName)
@@ -40,9 +40,7 @@
                                             .Select(x => x.PermittingPrivilege)
                                             .FirstOrDefault();
         }
-
-        public bool Me { get; set; }
-
+        
         public bool CanBeDragged
         {
             get { return true; }

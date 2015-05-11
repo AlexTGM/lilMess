@@ -14,7 +14,6 @@
             {
                 var admin = new UserModel
                                     {
-                                        Me = true,
                                         Port = 9997,
                                         UserName = "admin",
                                         UserRole = new RoleModel { RoleColor = "Green", RoleName = "Administrator" }

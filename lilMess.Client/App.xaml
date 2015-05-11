@@ -4,10 +4,8 @@
              xmlns:vm="clr-namespace:lilMess.Client.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" StartupUri="Views/MainWindow.xaml"
-             Startup="Application_Startup"
-             Exit="Application_Exit"
-             LoadCompleted="ApplicationLoadCompleted"
+             mc:Ignorable="d" StartupUri="Views/MainView.xaml"
+             Exit="ApplicationExit"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <ResourceDictionary>
@@ -18,11 +16,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
                 
-                <ResourceDictionary Source="Resources/Translations/lang.ru-RU.xaml" />
-                
-                <ResourceDictionary Source="Styles/Others.xaml" />
-                
+                <ResourceDictionary Source="/Resources/Translations/lang.ru-RU.xaml" />
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
+
+                <ResourceDictionary Source="/Styles/Others.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />

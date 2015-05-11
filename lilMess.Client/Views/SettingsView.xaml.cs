@@ -1,10 +1,8 @@
 ﻿namespace lilMess.Client.Views
 {
-    using MahApps.Metro.Controls;
-
-    public partial class LoginWindow
+    public partial class SettingsView
     {
-        public LoginWindow()
+        public SettingsView()
         {
             InitializeComponent();
         }

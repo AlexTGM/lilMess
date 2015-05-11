@@ -87,7 +87,6 @@
             if (!_server.Connections.Any()) return;
 
             var outgoingMessage = _server.CreateMessage();
-
             outgoingMessage.Write(data);
 
             if (sender == null)

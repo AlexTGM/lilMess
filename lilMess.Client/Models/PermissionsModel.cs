@@ -4,20 +4,20 @@ namespace lilMess.Client.Models
 
     public class PermissionsModel : ObservableObject
     {
-        private string privilegeName;
+        private string _privilegeName;
 
-        private bool permittingPrivilege;
+        private bool _permittingPrivilege;
 
         public string PrivilegeName
         {
-            get { return privilegeName; }
-            set { Set("PrivilegeName", ref privilegeName, value); }
+            get { return _privilegeName; }
+            set { Set("PrivilegeName", ref _privilegeName, value); }
         }
 
         public bool PermittingPrivilege
         {
-            get { return permittingPrivilege; }
-            set { Set("PermittingPrivilege", ref permittingPrivilege, value); }
+            get { return _permittingPrivilege; }
+            set { Set("PermittingPrivilege", ref _permittingPrivilege, value); }
         }
     }
 }

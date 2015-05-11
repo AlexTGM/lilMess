@@ -27,7 +27,7 @@
         {
             _network = network;
 
-            Messenger.Default.Register<NotificationMessage<List<RoomModel>>>(this, MainWindowViewModel.Token, UpdateRoomsList);
+            Messenger.Default.Register<NotificationMessage<List<RoomModel>>>(this, MainViewModel.Token, UpdateRoomsList);
         }
 
         public ObservableCollection<RoomModel> RoomsList

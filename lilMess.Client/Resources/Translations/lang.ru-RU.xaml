@@ -1,10 +1,25 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
-    
+
+    <v:String x:Key="Cancel">Отменить</v:String>
+    <v:String x:Key="Save">Сохранить</v:String>
+
+    <v:String x:Key="MainWindowTitle">lilMess</v:String>
+    <v:String x:Key="SettingsWindowTitle">lilMess | Настройки</v:String>
+    <v:String x:Key="LoginWindowTitle">lilMess | Подключение</v:String>
+
+    <v:String x:Key="LoginWindowOpen">Подключиться</v:String>
+    <v:String x:Key="SettingsWindowOpen">Настройки</v:String>
+    <v:String x:Key="GitHubTooltip">lilMess на GitHub</v:String>
+
     <!-- Login window -->
     <v:String x:Key="Server">Сервер</v:String>
     <v:String x:Key="Login">Логин</v:String>
     <v:String x:Key="LoginAction">Продолжить</v:String>
+
+    <v:String x:Key="Localization">Язык приложения</v:String>
+    <v:String x:Key="Theme">Тема приложения</v:String>
+    <v:String x:Key="Accent">Акцент приложения</v:String>
 
 </ResourceDictionary>
