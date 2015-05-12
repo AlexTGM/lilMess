@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Linq;
 
     using AutoMapper;
@@ -24,6 +25,9 @@
 
         private bool lowerLimitsBounded = true, upperLimitsBounded = true;
 
+        protected PerformanceCounter cpuCounter = new PerformanceCounter();
+        protected PerformanceCounter ramCounter = new PerformanceCounter(); 
+
         public StatisticsVeiewModel(INetwork network)
         {
             ChartProviders = new ObservableCollection<ChartProvider>();
@@ -33,6 +37,12 @@
             ChartProviders.Add(new OutcomingTrafficProvider());
 
             network.StatisticsService.Statistics += GetStatistics;
+
+            cpuCounter.CategoryName = "Processor";
+            cpuCounter.CounterName = "% Processor Time";
+            cpuCounter.InstanceName = "_Total";
+
+            ramCounter = new PerformanceCounter("Memory", "Available MBytes"); 
 
             StartedOn = DateTime.Now.TimeOfDay.TotalSeconds;
         }
@@ -99,6 +109,9 @@
         {
             var stats = Mapper.Map<StatisticsModel>(statisticsModel);
             System.Windows.Application.Current.Dispatcher.Invoke(() => Collection.Add(stats));
+
+            stats.CpuLoad = cpuCounter.NextValue();
+            stats.MemLoad = ramCounter.NextValue();
 
             UpdatedOn = DateTime.Now.TimeOfDay.TotalSeconds;
         }

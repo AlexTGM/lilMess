@@ -17,6 +17,11 @@
 
         public bool UserHasPermittingPermission(UserModel user, string roleName)
         {
+            if (user == null)
+            {
+                return false;
+            }
+
             return user.HasPermittingPermissions(roleName);
         }
 
