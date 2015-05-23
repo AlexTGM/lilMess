@@ -20,6 +20,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lilMess.Server", "lilMess.Server\lilMess.Server.csproj", "{DDD07EA1-AC01-40BD-8DFD-3CC94837CBD2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5BBADC71-F2BB-4549-A9DF-AF26A60EE3D0}"
+	ProjectSection(SolutionItems) = preProject
+		libraries\DynamicDataDisplay.dll = libraries\DynamicDataDisplay.dll
+		libraries\Lidgren.Network.dll = libraries\Lidgren.Network.dll
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lilMess.Mvvm", "lilMess.Mvvm\lilMess.Mvvm.csproj", "{F0845142-7DA0-437D-9BF1-72C6F4C01BAA}"
 EndProject

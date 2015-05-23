@@ -1,16 +1,15 @@
 ﻿namespace lilMess.Misc.Model
 {
-    using System;
-
     using Lidgren.Network;
 
-    [Serializable]
+    using Newtonsoft.Json;
+
     public class UserModel
     {
-        [NonSerialized]
+        [JsonIgnore]
         private NetConnection _connection;
 
-        [NonSerialized]
+        [JsonIgnore]
         private string _guid;
 
         private string _userName;
@@ -36,6 +35,7 @@
 
         public string Id { get; set; }
 
+        [JsonIgnore]
         public NetConnection Connection
         {
             get
