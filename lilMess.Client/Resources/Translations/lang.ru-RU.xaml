@@ -20,6 +20,6 @@
 
     <v:String x:Key="Localization">Язык приложения</v:String>
     <v:String x:Key="Theme">Тема приложения</v:String>
-    <v:String x:Key="Accent">Акцент приложения</v:String>
+    <v:String x:Key="Accent">Цветовая схема приложения</v:String>
 
 </ResourceDictionary>
